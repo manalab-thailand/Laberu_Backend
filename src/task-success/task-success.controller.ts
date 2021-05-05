@@ -25,17 +25,17 @@ export class TaskSuccessController {
     return await this.taskSuccessService.findAll();
   }
 
-  @Get('findByShortcode/:shortcode')
+  @Get('findByShortcode/shortcode=:shortcode')
   async findByShortcode(@Param('shortcode') shortcode: String) {
     return await this.taskSuccessService.findByShortcode(shortcode);
   }
 
-  @Get('findCountByShortcode/:shortcode')
+  @Get('findCountByShortcode/shortcode=:shortcode')
   async findCountByShortcode(@Param('shortcode') shortcode: String) {
     return await this.taskSuccessService.findCountByShortcode(shortcode);
   }
 
-  @Get('findByUser/:user_id/:accept')
+  @Get('findByUser/user_id=:user_id&accept=:accept')
   async findByUser(
     @Param('user_id') user_id: String,
     @Param('accept') accept: Boolean,
@@ -43,12 +43,12 @@ export class TaskSuccessController {
     return await this.taskSuccessService.findCountTaskByUser(user_id, accept);
   }
 
-  @Get('findImageByUser/:user_id')
+  @Get('findImageByUser/user_id=:user_id')
   async findImageByUser(@Param('user_id') user_id: String) {
     return await this.taskSuccessService.findImageByUser(user_id);
   }
 
-  @Get('randomImageByUser/:user_id')
+  @Get('randomImageByUser/user_id=:user_id')
   async randomImageByUser(@Param('user_id') user_id: String) {
     return await this.taskSuccessService.randomImageByUser(user_id);
   }

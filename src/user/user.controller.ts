@@ -17,12 +17,12 @@ export class UserController {
     return await this.userService.findAll();
   }
 
-  @Get('/check_login/:uid')
+  @Get('/check_login/uid=:uid')
   async checkUserLogin(@Param('uid') uid: String) {
     return await this.userService.checkUserLogin(uid)
   }
 
-  @Delete('delete/:_id')
+  @Delete('/delete/:_id')
   async remove(@Param('_id') _id: string) {
     return await this.userService.remove(_id);
   }

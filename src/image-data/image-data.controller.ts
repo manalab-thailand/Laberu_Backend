@@ -22,13 +22,13 @@ export class ImageDataController {
     return await this.imageDataService.getCountImageData();
   }
 
-  @Get(':shortcode')
+  @Get('/shortcode=:shortcode')
   async findByShortcode(@Param('shortcode') shortcode: String) {
     return await this.imageDataService.findByShortcode(shortcode);
   }
 
   @Delete('deleteAll')
-  async removeAll(){
+  async removeAll() {
     return await this.imageDataService.removeAll();
   }
 }

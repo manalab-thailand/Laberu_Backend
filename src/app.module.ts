@@ -7,6 +7,7 @@ import { TaskSuccessModule } from './task-success/task-success.module';
 import { UserModule } from './user/user.module';
 import { ImageDataModule } from './image-data/image-data.module';
 import { ProjectModule } from './project/project.module';
+import { TesterModule } from './tester/tester.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProjectModule } from './project/project.module';
     TaskSuccessModule,
     ImageDataModule,
     ProjectModule,
+    TesterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

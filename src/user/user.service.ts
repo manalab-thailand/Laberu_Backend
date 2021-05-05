@@ -18,14 +18,12 @@ export class UserService {
     return await this.userModel.find().exec();
   }
 
-  async checkUserLogin(uid: String) {
-    const user = await this.userModel.find({ uid: uid }).exec();
+  async test(fname: String, lname: String) {
+    return await this.userModel.find({ fname: fname, lname: lname }).exec();
+  }
 
-    if (user) {
-      return user;
-    } else {
-      return null;
-    }
+  async checkUserLogin(uid: String) {
+    return await this.userModel.find({ uid: uid }).exec();
   }
 
   async remove(_id: String) {

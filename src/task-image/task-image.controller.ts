@@ -23,12 +23,12 @@ export class TaskImageController {
     return await this.taskImageService.getCountTaskSuccess();
   }
 
-  @Get('findImage/:user_id')
+  @Get('findImage/user_id=:user_id')
   async findNextImage(@Param('user_id') user_id: string) {
     return await this.taskImageService.findNextImage(user_id);
   }
 
-  @Get('fineTaskSuccessWithId/:task_id')
+  @Get('fineTaskSuccessWithId/task_id=:task_id')
   async fineTaskSuccessWithId(@Param('task_id') task_id: string) {
     return await this.taskImageService.fineTaskSuccessWithId(task_id)
   }
@@ -43,12 +43,12 @@ export class TaskImageController {
     return await this.taskImageService.randomTaskSuccessInAnImages();
   }
 
-  @Put('update_status/:_id')
+  @Put('update_status/_id=:_id')
   async updateStatus(@Param('_id') _id: string, @Body() updateTaskImageDto: UpdateTaskImageDto) {
     return await this.taskImageService.updateStatus(_id, updateTaskImageDto);
   }
 
-  @Put('update_process/:_id')
+  @Put('update_process/_id=:_id')
   async updateProcess(@Param('_id') _id: string, @Body() updateTaskImageDto: UpdateTaskImageDto) {
     return await this.taskImageService.updateProcess(_id, updateTaskImageDto);
   }

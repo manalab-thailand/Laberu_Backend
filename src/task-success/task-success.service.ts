@@ -37,7 +37,7 @@ export class TaskSuccessService {
   async findCountTaskByUser(user_id: String, accept: Boolean) {
     return await this.taskSuccessModel
       .find({ user_id: user_id, accept: accept })
-      .count()
+      .countDocuments()
       .exec();
   }
 
