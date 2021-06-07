@@ -10,6 +10,38 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@laberu/image-data": [
+        "libs/image-data/src"
+      ],
+      "@laberu/image-data/*": [
+        "libs/image-data/src/*"
+      ],
+      "@laberu/project-management": [
+        "libs/project-management/src"
+      ],
+      "@laberu/project-management/*": [
+        "libs/project-management/src/*"
+      ],
+      "@laberu/task-image-object": [
+        "libs/task-image-object/src"
+      ],
+      "@laberu/task-image-object/*": [
+        "libs/task-image-object/src/*"
+      ],
+      "@laberu/task-success-object": [
+        "libs/task-success-object/src"
+      ],
+      "@laberu/task-success-object/*": [
+        "libs/task-success-object/src/*"
+      ],
+      "@laberu/user": [
+        "libs/user/src"
+      ],
+      "@laberu/user/*": [
+        "libs/user/src/*"
+      ]
+    }
   }
 }

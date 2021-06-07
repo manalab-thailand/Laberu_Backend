@@ -1,9 +1,25 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@laberu/image-data/(.*)": "<rootDir>/../libs/image-data/src/$1",
+    "@laberu/image-data": "<rootDir>/../libs/image-data/src",
+    "@laberu/project-management/(.*)": "<rootDir>/../libs/project-management/src/$1",
+    "@laberu/project-management": "<rootDir>/../libs/project-management/src",
+    "@laberu/task-image-object/(.*)": "<rootDir>/../libs/task-image-object/src/$1",
+    "@laberu/task-image-object": "<rootDir>/../libs/task-image-object/src",
+    "@laberu/task-success-object/(.*)": "<rootDir>/../libs/task-success-object/src/$1",
+    "@laberu/task-success-object": "<rootDir>/../libs/task-success-object/src",
+    "@laberu/user/(.*)": "<rootDir>/../libs/user/src/$1",
+    "@laberu/user": "<rootDir>/../libs/user/src"
   }
 }

@@ -1,4 +1,54 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "src",
+  "projects": {
+    "image-data": {
+      "type": "library",
+      "root": "libs/image-data",
+      "entryFile": "index",
+      "sourceRoot": "libs/image-data/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/image-data/tsconfig.lib.json"
+      }
+    },
+    "project-management": {
+      "type": "library",
+      "root": "libs/project-management",
+      "entryFile": "index",
+      "sourceRoot": "libs/project-management/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/project-management/tsconfig.lib.json"
+      }
+    },
+    "task-image-object": {
+      "type": "library",
+      "root": "libs/task-image-object",
+      "entryFile": "index",
+      "sourceRoot": "libs/task-image-object/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/task-image-object/tsconfig.lib.json"
+      }
+    },
+    "task-success-object": {
+      "type": "library",
+      "root": "libs/task-success-object",
+      "entryFile": "index",
+      "sourceRoot": "libs/task-success-object/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/task-success-object/tsconfig.lib.json"
+      }
+    },
+    "user": {
+      "type": "library",
+      "root": "libs/user",
+      "entryFile": "index",
+      "sourceRoot": "libs/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/user/tsconfig.lib.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true
+  }
 }

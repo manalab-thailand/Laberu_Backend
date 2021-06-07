@@ -13,7 +13,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "gcp-build": "npm run build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -66,7 +66,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -74,7 +74,23 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "@laberu/image-data/(.*)": "<rootDir>/libs/image-data/src/$1",
+      "@laberu/image-data": "<rootDir>/libs/image-data/src",
+      "@laberu/project-management/(.*)": "<rootDir>/libs/project-management/src/$1",
+      "@laberu/project-management": "<rootDir>/libs/project-management/src",
+      "@laberu/task-image-object/(.*)": "<rootDir>/libs/task-image-object/src/$1",
+      "@laberu/task-image-object": "<rootDir>/libs/task-image-object/src",
+      "@laberu/task-success-object/(.*)": "<rootDir>/libs/task-success-object/src/$1",
+      "@laberu/task-success-object": "<rootDir>/libs/task-success-object/src",
+      "@laberu/user/(.*)": "<rootDir>/libs/user/src/$1",
+      "@laberu/user": "<rootDir>/libs/user/src"
+    }
   }
 }
