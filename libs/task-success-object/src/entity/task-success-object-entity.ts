@@ -8,19 +8,19 @@ export class TaskSuccessObject {
     @Prop({ required: true })
     shortcode: string;
 
-    @Prop()
+    @Prop({ required: true })
     filename: string;
 
-    @Prop()
+    @Prop({ required: true })
     object: [];
 
-    @Prop()
+    @Prop({ required: true })
     time_start: string;
 
-    @Prop()
+    @Prop({ required: true })
     time_stop: string;
 
-    @Prop()
+    @Prop({ required: true })
     accept: boolean;
 
     @Prop({ required: true })
