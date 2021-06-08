@@ -1,34 +1,31 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { CreateTaskSuccess } from './dto/create-task-success.dto';
+import { FindCountTaskSuccessByUser } from './dto/find-count-by-user.dto';
+import { FindCountSuccessByProjectId } from './dto/find-count-success-by-project.dto';
+import { FindCountTaskSuccessByShortcode } from './dto/find-count-success-by-shortcode.dto';
 import { TasksuccessService } from './tasksuccess.service';
-import { CreateTasksuccessDto } from './dto/create-tasksuccess.dto';
-import { UpdateTasksuccessDto } from './dto/update-tasksuccess.dto';
-
 @Controller('tasksuccess')
 export class TasksuccessController {
-  constructor(private readonly tasksuccessService: TasksuccessService) {}
+  constructor(private readonly tasksuccessService: TasksuccessService) { }
 
-  @Post()
-  create(@Body() createTasksuccessDto: CreateTasksuccessDto) {
-    return this.tasksuccessService.create(createTasksuccessDto);
+  @Post('create')
+  async create(@Body() payload: CreateTaskSuccess): Promise<any> {
+    return await this.tasksuccessService.createTaskSuccessHandler(payload);
   }
 
-  @Get()
-  findAll() {
-    return this.tasksuccessService.findAll();
+  @Get('findCountTaskSuccessByShortcode')
+  async findCountTaskSuccessByShortcode(@Body() payload: FindCountTaskSuccessByShortcode): Promise<any> {
+    return await this.tasksuccessService.findCountTaskSuccessByShortcodeHandler(payload);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tasksuccessService.findOne(+id);
+  @Get('findCountTaskSuccessByUser')
+  async findCountTaskSuccessByUser(@Body() payload: FindCountTaskSuccessByUser): Promise<any> {
+    return await this.tasksuccessService.findCountTaskSuccessHandler(payload);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateTasksuccessDto: UpdateTasksuccessDto) {
-    return this.tasksuccessService.update(+id, updateTasksuccessDto);
+  @Get('findCountTaskSuccessByProject')
+  async findCountTaskSuccessByProject(@Body() payload: FindCountSuccessByProjectId): Promise<any> {
+    return await this.tasksuccessService.findCountTaskSuccessByProjectHandler(payload);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksuccessService.remove(+id);
-  }
 }

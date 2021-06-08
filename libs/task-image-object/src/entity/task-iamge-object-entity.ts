@@ -3,7 +3,7 @@ import { Document } from "mongoose";
 
 export type TaskImageObjectDocument = TaskImageObject & Document;
 
-@Schema({ collection: "task_image" })
+@Schema({ collection: "task_image_object" })
 export class TaskImageObject {
     @Prop()
     shortcode: string;
@@ -16,6 +16,9 @@ export class TaskImageObject {
 
     @Prop()
     process: boolean;
+
+    @Prop()
+    project_id: string;
 }
 
 export const TaskImageObjectSchema = SchemaFactory.createForClass(TaskImageObject);

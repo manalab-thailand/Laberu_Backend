@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type TaskSuccessObjectDocument = TaskSuccessObject & Document;
 
-@Schema({ collection: "task_success" })
+@Schema({ collection: "task_success_object" })
 export class TaskSuccessObject {
     @Prop({ required: true })
     shortcode: string;
@@ -28,6 +28,9 @@ export class TaskSuccessObject {
 
     @Prop({ required: true })
     task_id: string;
+
+    @Prop({ required: true })
+    project_id: string;
 }
 
 export const TaskSuccessObjectSchema = SchemaFactory.createForClass(TaskSuccessObject);

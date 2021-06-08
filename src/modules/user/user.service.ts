@@ -4,9 +4,10 @@ import { Model } from 'mongoose';
 import { CheckUserActive } from './dto/check-user.dto';
 import { CreateUser } from './dto/create.dto';
 import { User, UserDocument } from './entity/user-entity';
+import { IUserService } from './user-interface.service';
 
 @Injectable()
-export class UserService {
+export class UserService implements IUserService {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>

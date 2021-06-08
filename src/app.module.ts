@@ -3,13 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TaskImageObjectModule } from '@laberu/task-image-object';
-import { TaskSuccessObjectModule } from '@laberu/task-success-object';
-import { ImagedataController } from './modules/imagedata/imagedata.controller';
 import { ImagedataModule } from './modules/imagedata/imagedata.module';
 import { ProjectmanagementModule } from './modules/projectmanagement/projectmanagement.module';
 import { UserModule } from './modules/user/user.module';
-
+import { TaskimageModule } from './modules/taskimage/taskimage.module';
+import { TasksuccessModule } from './modules/tasksuccess/tasksuccess.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -25,6 +23,8 @@ import { UserModule } from './modules/user/user.module';
     ImagedataModule,
     ProjectmanagementModule,
     UserModule,
+    TaskimageModule,
+    TasksuccessModule,
   ],
   controllers: [AppController],
   providers: [AppService],

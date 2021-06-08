@@ -27,7 +27,7 @@ export class ImagedataService implements IImagedataService {
 
   async findCountByProjectId(payload: FindCountByProjectId): Promise<any> {
     const { project_id } = payload;
-    return await this.ImageDataModel.count({ project_id }).exec();
+    return await this.ImageDataModel.countDocuments({ project_id }).exec();
   }
 
 }

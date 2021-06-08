@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
-import { ImageDataService } from 'src/image-data/image-data.service';
 import { createImageData } from './dto/create.dto';
 import { FindCountByProjectId } from './dto/find-count-by-project-id.dto';
 import { FindOneByShortcode } from './dto/find-one-by-shortcode.dto';

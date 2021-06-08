@@ -9,7 +9,7 @@ export interface ITaskImageObjectService {
     createTaskImageObject(payload: CreateTaskImageObject): Promise<any>
     findCountTaskImageObject(): Promise<any>
     queryImageObject(payload: QueryImageObject): Promise<TaskImageObject>
-    updateStatus(payload: UpdateStatusImageOjbect): Promise<any>
-    updateProcess(payload: UpdateProcessImageOjbect): Promise<any>
-    findTaskImageObjectResidualWork(payload: FindTaskImageObjectResidualWork): Promise<TaskImageObject>
+    updateStatusObject(payload: UpdateStatusImageOjbect): Promise<any>
+    updateProcessObject(payload: UpdateProcessImageOjbect): Promise<any>
+    findTaskImageObjectResidualWork(): Promise<TaskImageObject>
 }

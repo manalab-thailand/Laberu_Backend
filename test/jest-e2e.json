@@ -20,6 +20,10 @@
     "@laberu/task-success-object/(.*)": "<rootDir>/../libs/task-success-object/src/$1",
     "@laberu/task-success-object": "<rootDir>/../libs/task-success-object/src",
     "@laberu/user/(.*)": "<rootDir>/../libs/user/src/$1",
-    "@laberu/user": "<rootDir>/../libs/user/src"
+    "@laberu/user": "<rootDir>/../libs/user/src",
+    "@laberu/task-success-annotation/(.*)": "<rootDir>/../libs/task-success-annotation/src/$1",
+    "@laberu/task-success-annotation": "<rootDir>/../libs/task-success-annotation/src",
+    "@laberu/task-image-annotation/(.*)": "<rootDir>/../libs/task-image-annotation/src/$1",
+    "@laberu/task-image-annotation": "<rootDir>/../libs/task-image-annotation/src"
   }
 }

@@ -1,34 +1,46 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { CreateTaskImageHandler } from './dto/create-task-image.dto';
+import { FindCountTaskImage } from './dto/find-count.dto';
+import { QueryImage } from './dto/query-image.dto';
+import { ResetTaskImage } from './dto/reset-task-image.dto';
+import { TaskImageResponse } from './dto/task-image-response.dto';
+import { UpdateProcessTaskImage, UpdateStatusTaskImage } from './dto/update-task-image.dto';
 import { TaskimageService } from './taskimage.service';
-import { CreateTaskimageDto } from './dto/create-taskimage.dto';
-import { UpdateTaskimageDto } from './dto/update-taskimage.dto';
 
 @Controller('taskimage')
 export class TaskimageController {
-  constructor(private readonly taskimageService: TaskimageService) {}
+  constructor(
+    private readonly taskimageService: TaskimageService
+  ) { }
 
-  @Post()
-  create(@Body() createTaskimageDto: CreateTaskimageDto) {
-    return this.taskimageService.create(createTaskimageDto);
+  @Post('create')
+  async create(@Body() payload: CreateTaskImageHandler): Promise<any> {
+    return await this.taskimageService.createTaskImageHandler(payload);
   }
 
-  @Get()
-  findAll() {
-    return this.taskimageService.findAll();
+  @Post('findCountImage')
+  async findCountImage(@Body() payload: FindCountTaskImage): Promise<any> {
+    return await this.taskimageService.findCountImageHandler(payload);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskimageService.findOne(+id);
+  @Post('queryImage')
+  async queryImage(@Body() payload: QueryImage): Promise<TaskImageResponse> {
+    return await this.taskimageService.QueryTaskImageHandler(payload);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateTaskimageDto: UpdateTaskimageDto) {
-    return this.taskimageService.update(+id, updateTaskimageDto);
+  @Put('updateStatusImage')
+  async updateStatusImage(@Body() payload: UpdateStatusTaskImage): Promise<any> {
+    return await this.taskimageService.UpdateStatusHandler(payload);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taskimageService.remove(+id);
+  @Put('updateProcessImage')
+  async updateProcessImage(@Body() payload: UpdateProcessTaskImage): Promise<any> {
+    return await this.taskimageService.UpdateProcessHandler(payload);
   }
+
+  @Put('ResetTaskImage')
+  async resetTaskImage(@Body() payload: ResetTaskImage): Promise<any> {
+    return await this.taskimageService.ResetTaskImageHandler(payload);
+  }
+
 }

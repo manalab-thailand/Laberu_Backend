@@ -1,7 +1,7 @@
 export class CreateTaskSuccessObject {
     shortcode: string;
     filename: string;
-    object: [];
+    object?: [];
     time_start: string;
     time_stop: string;
     accept: boolean;
