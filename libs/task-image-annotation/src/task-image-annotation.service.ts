@@ -3,6 +3,7 @@ import { UpdateStatusImageOjbect } from '@laberu/task-image-object/dto/update-st
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { FindCountTaskImage } from 'src/modules/taskimage/dto/find-count.dto';
 import { CreateTaskImageAnnotation } from './dto/create-task-image-object.dto';
 import { QueryImageAnnotation } from './dto/query-image.dto';
 import { UpdateProcessImageAnnotation } from './dto/update-process.dto';
@@ -22,17 +23,18 @@ export class TaskImageAnnotationService implements ITaskImageAnnotationService {
         await createTaskImageAnnotation.save();
     }
 
-    async findCountTaskImageAnnotation(): Promise<any> {
-        return await this.taskIamgeAnnotationModel.countDocuments({ process: true }).exec()
+    async findCountTaskImageAnnotation(payload: FindCountTaskImage): Promise<any> {
+        const { project_id } = payload
+        return await this.taskIamgeAnnotationModel.countDocuments({ process: true, project_id, }).exec()
     }
 
-    async queryImageAnnotation(payload: QueryImageAnnotation): Promise<TaskImageAnnotation> {
-        const { user_id } = payload;
+    async queryImageAnnotation(payload: QueryImageAnnotation): Promise<any> {
+        const { user_id, project_id } = payload;
         return await this.taskIamgeAnnotationModel.aggregate([
-            { $match: { status: false, process: false } },
+            { $match: { status: false, process: false, project_id: project_id } },
             {
                 $lookup: {
-                    from: "task_success",
+                    from: "task_success_annotation",
                     localField: "shortcode",
                     foreignField: "shortcode",
                     as: "TaskSuccess"

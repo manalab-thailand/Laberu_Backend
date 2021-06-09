@@ -21,8 +21,8 @@ export class TaskSuccessAnnotationService {
     }
 
     async findCountSuccessByShortcode(payload: FindCountSuccessByShortcode): Promise<any> {
-        const { shortcode } = payload
-        return await this.taskSuccessAnnotationModel.countDocuments({ shortcode }).exec()
+        const { shortcode, project_id } = payload
+        return await this.taskSuccessAnnotationModel.countDocuments({ shortcode, project_id }).exec()
     }
 
     async findTaskSuccessByUserId(payload: FindTaskSuccessByUserId): Promise<any> {

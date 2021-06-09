@@ -3,7 +3,7 @@ import { Document } from "mongoose";
 
 export type TaskImageAnnotationDocument = TaskImageAnnotation & Document;
 
-@Schema({ collection: "task_image" })
+@Schema({ collection: "task_image_annotation" })
 export class TaskImageAnnotation {
     @Prop()
     shortcode: string;

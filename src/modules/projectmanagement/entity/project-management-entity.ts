@@ -3,22 +3,28 @@ import { Document } from 'mongoose';
 
 export type ProjectManagementDocument = ProjectManagement & Document;
 
-@Schema({ collection: "project" })
+@Schema({ collection: "project_laberu" })
 export class ProjectManagement {
-    @Prop()
-    project_name: String;
+    @Prop({ required: true })
+    project_name: string;
+
+    @Prop({ required: true })
+    labelType: string;
+
+    @Prop({ required: true })
+    labellingCount: number;
+
+    @Prop({ required: true })
+    baseImageUrl: string;
+
+    @Prop({ required: true })
+    priceEach: number;
+
+    @Prop({ required: true })
+    config: []
 
     @Prop()
-    labelType: String;
-
-    @Prop()
-    labelingCount: String;
-
-    @Prop()
-    baseImageUrl: String;
-
-    @Prop()
-    customerID: String;
+    process: boolean;
 }
 
 export const ProjectManagementSchema = SchemaFactory.createForClass(ProjectManagement);

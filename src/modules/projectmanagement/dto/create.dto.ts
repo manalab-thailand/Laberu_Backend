@@ -3,7 +3,9 @@ export class CreateProjectManagement {
     labelType: string;
     labelingCount: string;
     baseImageUrl: string;
-    customerID: string;
+    priceEach: number;
+    config: []
+    process: boolean;
 
 
     constructor(payload: CreateProjectManagement) {

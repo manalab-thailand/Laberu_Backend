@@ -4,8 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ImagedataModule } from './modules/imagedata/imagedata.module';
-import { ProjectmanagementModule } from './modules/projectmanagement/projectmanagement.module';
 import { UserModule } from './modules/user/user.module';
+import { ProjectmanagementModule } from './modules/projectmanagement/projectmanagement.module';
 import { TaskimageModule } from './modules/taskimage/taskimage.module';
 import { TasksuccessModule } from './modules/tasksuccess/tasksuccess.module';
 @Module({

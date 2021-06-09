@@ -9,7 +9,6 @@ export class createImageData {
             height: string,
         }
     }
-
     constructor(payload: createImageData) {
         Object.assign(this, payload);
     }

@@ -7,11 +7,11 @@ export type ImageDataDocument = ImageData & Document;
 @Schema({ collection: "image_data" })
 export class ImageData {
     @Prop({ required: true })
-    shortcode: String;
+    shortcode: string;
 
     @Prop({ type: {} })
     annotation: {
-        description_english: String,
+        description_english: string,
     }
 
     @Prop({ type: {} })

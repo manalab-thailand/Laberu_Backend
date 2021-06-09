@@ -1,14 +1,15 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { CreateTaskImageHandler } from './dto/create-task-image.dto';
 import { FindCountTaskImage } from './dto/find-count.dto';
 import { QueryImage } from './dto/query-image.dto';
 import { ResetTaskImage } from './dto/reset-task-image.dto';
 import { TaskImageResponse } from './dto/task-image-response.dto';
 import { UpdateProcessTaskImage, UpdateStatusTaskImage } from './dto/update-task-image.dto';
+import { ITaskimageController } from './interface/taskimage-interface.controller';
 import { TaskimageService } from './taskimage.service';
 
 @Controller('taskimage')
-export class TaskimageController {
+export class TaskimageController implements ITaskimageController {
   constructor(
     private readonly taskimageService: TaskimageService
   ) { }
@@ -18,8 +19,8 @@ export class TaskimageController {
     return await this.taskimageService.createTaskImageHandler(payload);
   }
 
-  @Post('findCountImage')
-  async findCountImage(@Body() payload: FindCountTaskImage): Promise<any> {
+  @Get('findCountImage')
+  async findCountImage(@Query() payload: FindCountTaskImage): Promise<any> {
     return await this.taskimageService.findCountImageHandler(payload);
   }
 

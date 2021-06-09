@@ -22,8 +22,8 @@ export class TaskSuccessObjectService implements ITaskSuccessObjectService {
     }
 
     async findCountSuccessByShortcode(payload: FindCountSuccessByShortcode): Promise<any> {
-        const { shortcode } = payload
-        return await this.taskSuccessObjectModel.countDocuments({ shortcode }).exec()
+        const { shortcode, project_id } = payload
+        return await this.taskSuccessObjectModel.countDocuments({ shortcode, project_id }).exec()
     }
 
     async findTaskSuccessByUserId(payload: FindTaskSuccessByUserId): Promise<any> {

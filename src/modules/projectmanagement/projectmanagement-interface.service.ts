@@ -4,5 +4,6 @@ import { ProjectManagement } from "./entity/project-management-entity";
 
 export interface IProjectmanagementService {
     createProjectManagement(payload: CreateProjectManagement): Promise<any>
+    findAllProject(): Promise<ProjectManagement>
     findProjectById(payload: FindProjectById): Promise<ProjectManagement>
 }

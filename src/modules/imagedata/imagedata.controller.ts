@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { createImageData } from './dto/create.dto';
 import { FindCountByProjectId } from './dto/find-count-by-project-id.dto';
 import { FindOneByShortcode } from './dto/find-one-by-shortcode.dto';
-import { IImagedataController } from './imagedata-inferface.controller';
+import { IImagedataController } from './interface/imagedata-inferface.controller';
 import { ImagedataService } from './imagedata.service';
 
 @Controller('imagedata')
@@ -15,14 +15,24 @@ export class ImagedataController implements IImagedataController {
     return await this.imageDataService.createImageData(payload);
   }
 
+  @Get('findALl')
+  async findAll(): Promise<any> {
+    return await this.imageDataService.findAll();
+  }
+
   @Get('findOneByShortcode')
-  async findOneByShortcode(@Body() payload: FindOneByShortcode): Promise<any> {
+  async findOneByShortcode(@Query() payload: FindOneByShortcode): Promise<any> {
     return await this.imageDataService.findOneByShortcode(payload);
   }
 
   @Get('findCountByProjectId')
-  async findCountByProjectId(@Body() payload: FindCountByProjectId): Promise<any> {
+  async findCountByProjectId(@Query() payload: FindCountByProjectId): Promise<any> {
     return await this.imageDataService.findCountByProjectId(payload);
+  }
+
+  @Post('insertMany')
+  async interMany(@Body() payload: any): Promise<any> {
+    return await this.imageDataService.insertMany(payload);
   }
 
 }

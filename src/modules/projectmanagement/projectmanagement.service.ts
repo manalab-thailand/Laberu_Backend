@@ -18,6 +18,10 @@ export class ProjectmanagementService {
         await createProjectManagement.save();
     }
 
+    async findAllProject(): Promise<any> {
+        return await this.ProjectManagementModel.find({ process: false }).exec();
+    }
+
     async findProjectById(payload: FindProjectById): Promise<ProjectManagement> {
         const { id } = payload
         return await this.ProjectManagementModel.findOne({ _id: id }).exec()

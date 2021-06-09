@@ -15,7 +15,7 @@ import { QueryImage } from './dto/query-image.dto';
 import { ResetTaskImage } from './dto/reset-task-image.dto';
 import { TaskImageResponse } from './dto/task-image-response.dto';
 import { UpdateProcessTaskImage, UpdateStatusTaskImage } from './dto/update-task-image.dto';
-import { ITaskimageService } from './taskimage-interface.service';
+import { ITaskimageService } from './interface/taskimage-interface.service';
 
 @Injectable()
 export class TaskimageService implements ITaskimageService {
@@ -44,10 +44,10 @@ export class TaskimageService implements ITaskimageService {
     const { type } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return await this.findCountTaskImageObject();
+        return await this.findCountTaskImageObject(payload);
       }
       case TaskimageService.ANNOTATION: {
-        return await this.findCountTaskImageAnnotation();
+        return await this.findCountTaskImageAnnotation(payload);
       }
     }
   }
@@ -121,8 +121,8 @@ export class TaskimageService implements ITaskimageService {
     return await this.taskImageObjectService.findTaskImageObjectResidualWork();
   }
 
-  async findCountTaskImageObject(): Promise<any> {
-    return await this.taskImageObjectService.findCountTaskImageObject();
+  async findCountTaskImageObject(payload: FindCountTaskImage): Promise<any> {
+    return await this.taskImageObjectService.findCountTaskImageObject(payload);
   }
 
   //Annotation
@@ -146,7 +146,7 @@ export class TaskimageService implements ITaskimageService {
     return await this.taskImageAnnotationService.findTaskImageAnnotationResidualWork();
   }
 
-  async findCountTaskImageAnnotation(): Promise<any> {
-    return await this.taskImageAnnotationService.findCountTaskImageAnnotation();
+  async findCountTaskImageAnnotation(payload: FindCountTaskImage): Promise<any> {
+    return await this.taskImageAnnotationService.findCountTaskImageAnnotation(payload);
   }
 }

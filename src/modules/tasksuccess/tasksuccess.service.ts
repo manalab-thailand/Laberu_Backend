@@ -36,7 +36,7 @@ export class TasksuccessService {
 
   async findCountTaskSuccessHandler(payload: FindCountTaskSuccessByUser): Promise<FindCountTaskSuccessByUserResponse> {
     const countObject = await this.taskSuccessObjectService.findCountTaskSuccessByUserId(payload);
-    const countAnnotation = 0;
+    const countAnnotation = await this.taskSuccessAnnotationService.findCountTaskSuccessByUserId(payload);
     const countClassification = 0;
     return new FindCountTaskSuccessByUserResponse({
       countAnnotation,

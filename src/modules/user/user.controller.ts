@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { CheckUserActive } from './dto/check-user.dto';
 import { CreateUser } from './dto/create.dto';
+import { FindOneUserByUID } from './dto/find-one.dto';
 import { User } from './entity/user-entity';
 import { IUserController } from './user-interface.controller';
 import { UserService } from './user.service';
@@ -18,7 +19,7 @@ export class UserController implements IUserController {
     }
 
     @Get('checkuserActive')
-    async checkUser(@Body() payload: CheckUserActive): Promise<User> {
+    async checkUser(@Query() payload: CheckUserActive): Promise<User> {
         return await this.userService.checkUserActive(payload);
     }
 

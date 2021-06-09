@@ -5,7 +5,7 @@ import { createImageData } from './dto/create.dto';
 import { FindCountByProjectId } from './dto/find-count-by-project-id.dto';
 import { FindOneByShortcode } from './dto/find-one-by-shortcode.dto';
 import { ImageData, ImageDataDocument } from './entity/image-datum.entity';
-import { IImagedataService } from './imagedata-interface.service';
+import { IImagedataService } from './interface/imagedata-interface.service';
 
 @Injectable()
 export class ImagedataService implements IImagedataService {
@@ -20,9 +20,17 @@ export class ImagedataService implements IImagedataService {
     await createImageData.save();
   }
 
+  async insertMany(payload: any): Promise<any> {
+    return await this.ImageDataModel.insertMany(payload.mapdata);
+  }
+
+  async findAll(): Promise<any> {
+    return await this.ImageDataModel.find({}).limit(10).exec();
+  }
+
   async findOneByShortcode(payload: FindOneByShortcode): Promise<ImageData> {
-    const { shortcode } = payload
-    return await this.ImageDataModel.findOne({ shortcode }).exec();
+    const { shortcode, project_id } = payload
+    return await this.ImageDataModel.findOne({ shortcode, project_id }).exec();
   }
 
   async findCountByProjectId(payload: FindCountByProjectId): Promise<any> {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { CreateTaskSuccess } from './dto/create-task-success.dto';
 import { FindCountTaskSuccessByUser } from './dto/find-count-by-user.dto';
 import { FindCountSuccessByProjectId } from './dto/find-count-success-by-project.dto';
@@ -14,17 +14,17 @@ export class TasksuccessController {
   }
 
   @Get('findCountTaskSuccessByShortcode')
-  async findCountTaskSuccessByShortcode(@Body() payload: FindCountTaskSuccessByShortcode): Promise<any> {
+  async findCountTaskSuccessByShortcode(@Query() payload: FindCountTaskSuccessByShortcode): Promise<any> {
     return await this.tasksuccessService.findCountTaskSuccessByShortcodeHandler(payload);
   }
 
   @Get('findCountTaskSuccessByUser')
-  async findCountTaskSuccessByUser(@Body() payload: FindCountTaskSuccessByUser): Promise<any> {
+  async findCountTaskSuccessByUser(@Query() payload: FindCountTaskSuccessByUser): Promise<any> {
     return await this.tasksuccessService.findCountTaskSuccessHandler(payload);
   }
 
   @Get('findCountTaskSuccessByProject')
-  async findCountTaskSuccessByProject(@Body() payload: FindCountSuccessByProjectId): Promise<any> {
+  async findCountTaskSuccessByProject(@Query() payload: FindCountSuccessByProjectId): Promise<any> {
     return await this.tasksuccessService.findCountTaskSuccessByProjectHandler(payload);
   }
 

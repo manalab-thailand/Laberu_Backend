@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type TaskSuccessAnnotationDocument = TaskSuccessAnnotation & Document;
 
-@Schema({ collection: "task_success" })
+@Schema({ collection: "task_success_annotation" })
 export class TaskSuccessAnnotation {
     @Prop({ required: true })
     shortcode: String;
