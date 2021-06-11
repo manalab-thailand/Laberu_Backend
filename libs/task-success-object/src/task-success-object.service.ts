@@ -17,6 +17,7 @@ export class TaskSuccessObjectService implements ITaskSuccessObjectService {
     ) { }
 
     async createTaskSuccessObject(payload: CreateTaskSuccessObject): Promise<any> {
+        console.log(payload);
         const createTaskSuccessObject = new this.taskSuccessObjectModel(payload);
         await createTaskSuccessObject.save();
     }

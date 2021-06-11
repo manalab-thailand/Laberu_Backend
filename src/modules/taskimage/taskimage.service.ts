@@ -1,5 +1,7 @@
+import { CreateTaskImageManyAnnotation } from '@laberu/task-image-annotation/dto/create-task-many-annotation.dto';
 import { TaskImageObjectService } from '@laberu/task-image-object';
 import { CreateTaskImageObject } from '@laberu/task-image-object/dto/create-task-image-object.dto';
+import { CreateTaskImageManyObject } from '@laberu/task-image-object/dto/create-task-many-object.dto';
 import { QueryImageObject } from '@laberu/task-image-object/dto/query-image.dto';
 import { UpdateProcessImageOjbect } from '@laberu/task-image-object/dto/update-process.dto';
 import { UpdateStatusImageOjbect } from '@laberu/task-image-object/dto/update-status.dto';
@@ -9,6 +11,7 @@ import { CreateTaskImageAnnotation } from 'libs/task-image-annotation/src/dto/cr
 import { QueryImageAnnotation } from 'libs/task-image-annotation/src/dto/query-image.dto';
 import { UpdateProcessImageAnnotation } from 'libs/task-image-annotation/src/dto/update-process.dto';
 import { UpdateStatusImageAnnotation } from 'libs/task-image-annotation/src/dto/update-status.dto';
+import { CreateTaskImageManyHandler } from './dto/create-many.dto';
 import { CreateTaskImageHandler } from './dto/create-task-image.dto';
 import { FindCountTaskImage } from './dto/find-count.dto';
 import { QueryImage } from './dto/query-image.dto';
@@ -36,6 +39,18 @@ export class TaskimageService implements ITaskimageService {
       }
       case TaskimageService.ANNOTATION: {
         return await this.createTaskImageAnnotation(data);
+      }
+    }
+  }
+
+  async createTaskImageManyHandler(payload: CreateTaskImageManyHandler): Promise<any> {
+    const { type, ...data } = payload
+    switch (type) {
+      case TaskimageService.LABELLING: {
+        return await this.createTaskImageManyObject(data);
+      }
+      case TaskimageService.ANNOTATION: {
+        return await this.createTaskImageManyAnnotation(data);
       }
     }
   }
@@ -105,6 +120,10 @@ export class TaskimageService implements ITaskimageService {
     return await this.taskImageObjectService.createTaskImageObject(payload);
   }
 
+  async createTaskImageManyObject(payload: CreateTaskImageManyObject): Promise<any> {
+    return await this.taskImageObjectService.createTaskImageManyObject(payload);
+  }
+
   async queryImageObject(payload: QueryImageObject): Promise<TaskImageResponse> {
     return await this.taskImageObjectService.queryImageObject(payload);
   }
@@ -128,6 +147,10 @@ export class TaskimageService implements ITaskimageService {
   //Annotation
   async createTaskImageAnnotation(payload: CreateTaskImageAnnotation): Promise<any> {
     return await this.taskImageAnnotationService.createTaskImageAnnotation(payload);
+  }
+
+  async createTaskImageManyAnnotation(payload: CreateTaskImageManyAnnotation): Promise<any> {
+    return await this.taskImageAnnotationService.createTaskImageManyAnnotation(payload);
   }
 
   async queryImageAnnotation(payload: QueryImageAnnotation): Promise<TaskImageResponse> {

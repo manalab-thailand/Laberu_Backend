@@ -25,6 +25,11 @@ export class ImagedataController implements IImagedataController {
     return await this.imageDataService.findOneByShortcode(payload);
   }
 
+  @Get('findAllByProjectId')
+  async findAllByProjectId(@Query() payload: FindCountByProjectId): Promise<any> {
+    return await this.imageDataService.findAllByProjectId(payload);
+  }
+
   @Get('findCountByProjectId')
   async findCountByProjectId(@Query() payload: FindCountByProjectId): Promise<any> {
     return await this.imageDataService.findCountByProjectId(payload);

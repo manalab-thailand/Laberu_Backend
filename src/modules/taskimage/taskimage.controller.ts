@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
+import { CreateTaskImageManyHandler } from './dto/create-many.dto';
 import { CreateTaskImageHandler } from './dto/create-task-image.dto';
 import { FindCountTaskImage } from './dto/find-count.dto';
 import { QueryImage } from './dto/query-image.dto';
@@ -17,6 +18,11 @@ export class TaskimageController implements ITaskimageController {
   @Post('create')
   async create(@Body() payload: CreateTaskImageHandler): Promise<any> {
     return await this.taskimageService.createTaskImageHandler(payload);
+  }
+
+  @Post('createInsertMany')
+  async createInsertMany(@Body() payload: CreateTaskImageManyHandler): Promise<any> {
+    return await this.taskimageService.createTaskImageManyHandler(payload);
   }
 
   @Get('findCountImage')

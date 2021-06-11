@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FindCountTaskImage } from 'src/modules/taskimage/dto/find-count.dto';
 import { CreateTaskImageAnnotation } from './dto/create-task-image-object.dto';
+import { CreateTaskImageManyAnnotation } from './dto/create-task-many-annotation.dto';
 import { QueryImageAnnotation } from './dto/query-image.dto';
 import { UpdateProcessImageAnnotation } from './dto/update-process.dto';
 import { UpdateStatusImageAnnotation } from './dto/update-status.dto';
@@ -21,6 +22,11 @@ export class TaskImageAnnotationService implements ITaskImageAnnotationService {
     async createTaskImageAnnotation(payload: CreateTaskImageAnnotation): Promise<any> {
         const createTaskImageAnnotation = new this.taskIamgeAnnotationModel(payload);
         await createTaskImageAnnotation.save();
+    }
+
+    async createTaskImageManyAnnotation(payload: CreateTaskImageManyAnnotation): Promise<any> {
+        const { mapdata } = payload
+        return await this.taskIamgeAnnotationModel.insertMany(mapdata);
     }
 
     async findCountTaskImageAnnotation(payload: FindCountTaskImage): Promise<any> {

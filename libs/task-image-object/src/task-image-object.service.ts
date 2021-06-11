@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FindCountTaskImage } from 'src/modules/taskimage/dto/find-count.dto';
 import { CreateTaskImageObject } from './dto/create-task-image-object.dto';
+import { CreateTaskImageManyObject } from './dto/create-task-many-object.dto';
 import { QueryImageObject } from './dto/query-image.dto';
 import { UpdateProcessImageOjbect } from './dto/update-process.dto';
 import { UpdateStatusImageOjbect } from './dto/update-status.dto';
@@ -20,6 +21,11 @@ export class TaskImageObjectService implements ITaskImageObjectService {
     async createTaskImageObject(payload: CreateTaskImageObject): Promise<any> {
         const createTaskImageObject = new this.taskIamgeObjectModel(payload);
         await createTaskImageObject.save();
+    }
+
+    async createTaskImageManyObject(payload: CreateTaskImageManyObject): Promise<any> {
+        const { mapdata } = payload
+        return await this.taskIamgeObjectModel.insertMany(mapdata);
     }
 
     async findCountTaskImageObject(payload: FindCountTaskImage): Promise<any> {

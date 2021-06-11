@@ -33,6 +33,11 @@ export class ImagedataService implements IImagedataService {
     return await this.ImageDataModel.findOne({ shortcode, project_id }).exec();
   }
 
+  async findAllByProjectId(payload: FindCountByProjectId): Promise<any> {
+    const { project_id } = payload
+    return await this.ImageDataModel.find({ project_id }).exec();
+  }
+
   async findCountByProjectId(payload: FindCountByProjectId): Promise<any> {
     const { project_id } = payload;
     return await this.ImageDataModel.countDocuments({ project_id }).exec();

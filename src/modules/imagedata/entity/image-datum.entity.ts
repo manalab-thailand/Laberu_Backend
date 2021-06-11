@@ -15,10 +15,10 @@ export class ImageData {
     }
 
     @Prop({ type: {} })
-    object: {
+    detection: {
         size: {
-            width: string,
-            height: string,
+            width: number,
+            height: number,
         }
     }
 
