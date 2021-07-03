@@ -35,10 +35,10 @@ export class TaskimageService implements ITaskimageService {
     const { type, ...data } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return await this.createTaskImageObject(data);
+        return await this.taskImageObjectService.createTaskImageObject(data);
       }
       case TaskimageService.ANNOTATION: {
-        return await this.createTaskImageAnnotation(data);
+        return await this.taskImageAnnotationService.createTaskImageAnnotation(data);
       }
     }
   }
@@ -47,10 +47,10 @@ export class TaskimageService implements ITaskimageService {
     const { type, ...data } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return await this.createTaskImageManyObject(data);
+        return await this.taskImageObjectService.createTaskImageManyObject(data);
       }
       case TaskimageService.ANNOTATION: {
-        return await this.createTaskImageManyAnnotation(data);
+        return await this.taskImageAnnotationService.createTaskImageManyAnnotation(data);
       }
     }
   }
@@ -59,10 +59,10 @@ export class TaskimageService implements ITaskimageService {
     const { type } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return await this.findCountTaskImageObject(payload);
+        return await this.taskImageObjectService.findCountTaskImageObject(payload);
       }
       case TaskimageService.ANNOTATION: {
-        return await this.findCountTaskImageAnnotation(payload);
+        return await this.taskImageAnnotationService.findCountTaskImageAnnotation(payload);
       }
     }
   }
@@ -71,10 +71,10 @@ export class TaskimageService implements ITaskimageService {
     const { type, ...data } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return await this.queryImageObject(data);
+        return await this.taskImageObjectService.queryImageObject(data);
       }
       case TaskimageService.ANNOTATION: {
-        return await this.queryImageAnnotation(data);
+        return await this.taskImageAnnotationService.queryImageAnnotation(data);
       }
     }
   }
@@ -83,10 +83,10 @@ export class TaskimageService implements ITaskimageService {
     const { type, ...data } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return await this.updateStatusTaskObject(data);
+        return await this.taskImageObjectService.updateStatusObject(data);
       }
       case TaskimageService.ANNOTATION: {
-        return await this.updateStatusTaskAnnotation(data);
+        return await this.taskImageAnnotationService.updateStatusAnnotation(data);
       }
     }
   }
@@ -95,10 +95,10 @@ export class TaskimageService implements ITaskimageService {
     const { type, ...data } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return await this.updateProcessTaskObject(data);
+        return await this.taskImageObjectService.updateProcessObject(data);
       }
       case TaskimageService.ANNOTATION: {
-        return await this.updateProcessTaskAnnotation(data);
+        return await this.taskImageAnnotationService.updateProcessAnnotation(data);
       }
     }
   }
@@ -107,69 +107,12 @@ export class TaskimageService implements ITaskimageService {
     const { type } = payload
     switch (type) {
       case TaskimageService.LABELLING: {
-        return this.resetTaskImageObject();
+        return await this.taskImageObjectService.findTaskImageObjectResidualWork();
       }
       case TaskimageService.ANNOTATION: {
-        return this.resetTaskImageAnnotation();
+        return await this.taskImageAnnotationService.findTaskImageAnnotationResidualWork();
       }
     }
   }
 
-  //Object Labelling
-  async createTaskImageObject(payload: CreateTaskImageObject): Promise<any> {
-    return await this.taskImageObjectService.createTaskImageObject(payload);
-  }
-
-  async createTaskImageManyObject(payload: CreateTaskImageManyObject): Promise<any> {
-    return await this.taskImageObjectService.createTaskImageManyObject(payload);
-  }
-
-  async queryImageObject(payload: QueryImageObject): Promise<TaskImageResponse> {
-    return await this.taskImageObjectService.queryImageObject(payload);
-  }
-
-  async updateStatusTaskObject(payload: UpdateStatusImageOjbect): Promise<any> {
-    return await this.taskImageObjectService.updateStatusObject(payload);
-  }
-
-  async updateProcessTaskObject(payload: UpdateProcessImageOjbect): Promise<any> {
-    return await this.taskImageObjectService.updateProcessObject(payload);
-  }
-
-  async resetTaskImageObject(): Promise<any> {
-    return await this.taskImageObjectService.findTaskImageObjectResidualWork();
-  }
-
-  async findCountTaskImageObject(payload: FindCountTaskImage): Promise<any> {
-    return await this.taskImageObjectService.findCountTaskImageObject(payload);
-  }
-
-  //Annotation
-  async createTaskImageAnnotation(payload: CreateTaskImageAnnotation): Promise<any> {
-    return await this.taskImageAnnotationService.createTaskImageAnnotation(payload);
-  }
-
-  async createTaskImageManyAnnotation(payload: CreateTaskImageManyAnnotation): Promise<any> {
-    return await this.taskImageAnnotationService.createTaskImageManyAnnotation(payload);
-  }
-
-  async queryImageAnnotation(payload: QueryImageAnnotation): Promise<TaskImageResponse> {
-    return await this.taskImageAnnotationService.queryImageAnnotation(payload);
-  }
-
-  async updateStatusTaskAnnotation(payload: UpdateStatusImageAnnotation): Promise<any> {
-    return await this.taskImageAnnotationService.updateStatusAnnotation(payload);
-  }
-
-  async updateProcessTaskAnnotation(payload: UpdateProcessImageAnnotation): Promise<any> {
-    return await this.taskImageAnnotationService.updateProcessAnnotation(payload);
-  }
-
-  async resetTaskImageAnnotation(): Promise<any> {
-    return await this.taskImageAnnotationService.findTaskImageAnnotationResidualWork();
-  }
-
-  async findCountTaskImageAnnotation(payload: FindCountTaskImage): Promise<any> {
-    return await this.taskImageAnnotationService.findCountTaskImageAnnotation(payload);
-  }
 }

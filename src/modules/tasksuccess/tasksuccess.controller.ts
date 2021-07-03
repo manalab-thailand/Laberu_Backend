@@ -3,9 +3,10 @@ import { CreateTaskSuccess } from './dto/create-task-success.dto';
 import { FindCountTaskSuccessByUser } from './dto/find-count-by-user.dto';
 import { FindCountSuccessByProjectId } from './dto/find-count-success-by-project.dto';
 import { FindCountTaskSuccessByShortcode } from './dto/find-count-success-by-shortcode.dto';
+import { ITasksuccessController } from './interface/tasksuccess-interface.controller';
 import { TasksuccessService } from './tasksuccess.service';
 @Controller('tasksuccess')
-export class TasksuccessController {
+export class TasksuccessController implements ITasksuccessController {
   constructor(private readonly tasksuccessService: TasksuccessService) { }
 
   @Post('create')

@@ -3,7 +3,7 @@ import { CheckUserActive } from './dto/check-user.dto';
 import { CreateUser } from './dto/create.dto';
 import { FindOneUserByUID } from './dto/find-one.dto';
 import { User } from './entity/user-entity';
-import { IUserController } from './user-interface.controller';
+import { IUserController } from './interface/user-interface.controller';
 import { UserService } from './user.service';
 
 @Controller('user-laberu')

@@ -7,6 +7,8 @@ export class CreateTaskSuccessAnnotation {
     accept: boolean;
     user_id: string;
     task_id: string;
+    payment: string;
+    paymentAt: Date;
 
     constructor(payload: CreateTaskSuccessAnnotation) {
         Object.assign(this, payload)

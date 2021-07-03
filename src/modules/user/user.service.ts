@@ -5,7 +5,7 @@ import { CheckUserActive } from './dto/check-user.dto';
 import { CreateUser } from './dto/create.dto';
 import { FindOneUserByUID } from './dto/find-one.dto';
 import { User, UserDocument } from './entity/user-entity';
-import { IUserService } from './user-interface.service';
+import { IUserService } from './interface/user-interface.service';
 
 @Injectable()
 export class UserService implements IUserService {
