@@ -29,6 +29,12 @@ export class TaskSuccessObject {
     @Prop({ required: true })
     task_id: string;
 
+    @Prop()
+    payment: String;
+
+    @Prop()
+    paymentAt: Date;
+
     @Prop({ required: true })
     project_id: string;
 }

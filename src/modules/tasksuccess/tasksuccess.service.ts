@@ -20,12 +20,17 @@ export class TasksuccessService implements ITasksuccessService {
 
   async createTaskSuccessHandler(payload: CreateTaskSuccess): Promise<any> {
     const { type, ...data } = payload;
+    const createTaskSuccess = {
+      ...data,
+      payment: null,
+      paymentAt: null,
+    }
     switch (type) {
       case TasksuccessService.LABELLING: {
-        return await this.taskSuccessObjectService.createTaskSuccessObject(data);
+        return await this.taskSuccessObjectService.createTaskSuccessObject(createTaskSuccess);
       }
       case TasksuccessService.ANNOTATION: {
-        return await this.taskSuccessAnnotationService.createTaskSuccessAnnotation(data);
+        return await this.taskSuccessAnnotationService.createTaskSuccessAnnotation(createTaskSuccess);
       }
     }
   }

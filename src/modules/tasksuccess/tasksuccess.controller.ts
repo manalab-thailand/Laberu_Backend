@@ -28,5 +28,4 @@ export class TasksuccessController implements ITasksuccessController {
   async findCountTaskSuccessByProject(@Query() payload: FindCountSuccessByProjectId): Promise<any> {
     return await this.tasksuccessService.findCountTaskSuccessByProjectHandler(payload);
   }
-
 }

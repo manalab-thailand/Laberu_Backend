@@ -26,6 +26,12 @@ export class TaskSuccessAnnotation {
     @Prop({ required: true })
     task_id: String;
 
+    @Prop()
+    payment: String;
+
+    @Prop()
+    paymentAt: Date;
+
     @Prop({ required: true })
     project_id: String;
 }

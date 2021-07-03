@@ -1,7 +1,6 @@
 export class CreateTaskSuccessAnnotation {
     shortcode: string;
-    filename: string;
-    object?: [];
+    description?: string;
     time_start: string;
     time_stop: string;
     accept: boolean;

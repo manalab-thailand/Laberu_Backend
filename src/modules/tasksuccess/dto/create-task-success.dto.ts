@@ -9,8 +9,6 @@ export class CreateTaskSuccess {
     accept: boolean;
     user_id: string;
     task_id: string;
-    payment: string;
-    paymentAt: Date;
 
     constructor(payload: CreateTaskSuccess) {
         Object.assign(this, payload);
