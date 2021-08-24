@@ -20,7 +20,7 @@ export class TaskimageController implements ITaskimageController {
     return await this.taskimageService.createTaskImageHandler(payload);
   }
 
-  @Post('createInsertMany')
+  @Post('InsertMany')
   async createInsertMany(@Body() payload: CreateTaskImageManyHandler): Promise<any> {
     return await this.taskimageService.createTaskImageManyHandler(payload);
   }

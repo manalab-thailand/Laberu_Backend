@@ -20,8 +20,9 @@ export class ImagedataService implements IImagedataService {
     await createImageData.save();
   }
 
-  async insertMany(payload: any): Promise<any> {
-    return await this.ImageDataModel.insertMany(payload.mapdata);
+  async insertMany(payload: { mapdata }): Promise<any> {
+    const { mapdata } = payload
+    return await this.ImageDataModel.insertMany(mapdata);
   }
 
   async findAll(): Promise<any> {

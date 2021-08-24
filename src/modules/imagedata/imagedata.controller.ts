@@ -4,6 +4,7 @@ import { FindCountByProjectId } from './dto/find-count-by-project-id.dto';
 import { FindOneByShortcode } from './dto/find-one-by-shortcode.dto';
 import { IImagedataController } from './interface/imagedata-inferface.controller';
 import { ImagedataService } from './imagedata.service';
+import { CraeteImageDataMany } from './dto/insertmany';
 
 @Controller('imagedata')
 export class ImagedataController implements IImagedataController {
@@ -36,7 +37,7 @@ export class ImagedataController implements IImagedataController {
   }
 
   @Post('insertMany')
-  async interMany(@Body() payload: any): Promise<any> {
+  async interMany(@Body() payload: CraeteImageDataMany): Promise<any> {
     return await this.imageDataService.insertMany(payload);
   }
 

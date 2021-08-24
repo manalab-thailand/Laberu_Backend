@@ -16,6 +16,7 @@ export class ProjectmanagementService {
     async createProjectManagement(payload: CreateProjectManagement): Promise<any> {
         const createProjectManagement = new this.ProjectManagementModel(payload);
         await createProjectManagement.save();
+        return createProjectManagement
     }
 
     async findAllProject(): Promise<any> {
