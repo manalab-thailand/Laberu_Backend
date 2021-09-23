@@ -46,4 +46,30 @@ export class TaskSuccessObjectService implements ITaskSuccessObjectService {
         return await this.taskSuccessObjectModel.countDocuments({ project_id }).exec()
     }
 
+    async updateRemoveDecimal() {
+        const taskSuccess = await this.taskSuccessObjectModel.find({ project_id: "613761969a78147603abb475" })
+        for (const [index, iterator] of taskSuccess.entries()) {
+            const { object, _id, project_id, user_id, task_id, shortcode } = iterator
+            let updateRemoveDecimal = [] as any
+            for (const data of object) {
+                const { name, bndbox } = data
+                const { xmin, ymin, xmax, ymax } = bndbox
+
+                updateRemoveDecimal.push({
+                    name,
+                    bndbox: {
+                        xmin: Number(xmin).toFixed(0),
+                        ymin: Number(ymin).toFixed(0),
+                        xmax: Number(xmax).toFixed(0),
+                        ymax: Number(ymax).toFixed(0),
+                    }
+                })
+            }
+
+            await this.taskSuccessObjectModel.updateOne({ _id }, { object: updateRemoveDecimal })
+
+            console.log(index + 1, _id, project_id, user_id, task_id, shortcode, "updated");
+        }
+    }
+
 }

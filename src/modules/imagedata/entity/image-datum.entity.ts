@@ -15,7 +15,7 @@ export class ImageData {
     }
 
     @Prop({ type: {} })
-    detection: {
+    object: {
         size: {
             width: number,
             height: number,

@@ -69,4 +69,8 @@ export class TasksuccessService implements ITasksuccessService {
       countClassification,
     })
   }
+
+  async updateRemoveDecimal() {
+    await this.taskSuccessObjectService.updateRemoveDecimal();
+  }
 }

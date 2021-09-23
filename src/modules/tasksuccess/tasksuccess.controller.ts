@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, HttpCode } from '@nestjs/common';
 import { CreateTaskSuccess } from './dto/create-task-success.dto';
 import { FindCountTaskSuccessByUser } from './dto/find-count-by-user.dto';
 import { FindCountSuccessByProjectId } from './dto/find-count-success-by-project.dto';
@@ -27,5 +27,10 @@ export class TasksuccessController implements ITasksuccessController {
   @Get('findCountTaskSuccessByProject')
   async findCountTaskSuccessByProject(@Query() payload: FindCountSuccessByProjectId): Promise<any> {
     return await this.tasksuccessService.findCountTaskSuccessByProjectHandler(payload);
+  }
+
+  @Post('updateRemove')
+  async updateRemoveDecimal() {
+    return await this.tasksuccessService.updateRemoveDecimal();
   }
 }

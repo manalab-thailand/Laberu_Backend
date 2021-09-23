@@ -34,12 +34,12 @@ export class TaskImageObjectService implements ITaskImageObjectService {
     }
 
     async queryImageObject(payload: QueryImageObject): Promise<TaskImageObject> {
-        const { user_id } = payload;
+        const { user_id, project_id } = payload;
         return await this.taskIamgeObjectModel.aggregate([
-            { $match: { status: false, process: false } },
+            { $match: { status: false, process: false, project_id } },
             {
                 $lookup: {
-                    from: "task_success",
+                    from: "task_success_object",
                     localField: "shortcode",
                     foreignField: "shortcode",
                     as: "TaskSuccess"
@@ -93,5 +93,4 @@ export class TaskImageObjectService implements ITaskImageObjectService {
             }
         })
     }
-
 }

@@ -30,6 +30,9 @@ export class User {
     @Prop()
     province: String;
 
+    @Prop()
+    studentId: String;
+
     @Prop({ required: true })
     status: String;
 

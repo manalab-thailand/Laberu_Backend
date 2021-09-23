@@ -24,4 +24,9 @@ export class ProjectmanagementController {
     return await this.projectmanagementService.findProjectById(payload);
   }
 
+  @Post('remove')
+  async remove() {
+    return await this.projectmanagementService.removeDuplicateImage();
+  }
+
 }
