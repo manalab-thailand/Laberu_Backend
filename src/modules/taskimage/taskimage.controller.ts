@@ -30,6 +30,11 @@ export class TaskimageController implements ITaskimageController {
     return await this.taskimageService.findCountImageHandler(payload);
   }
 
+  @Post('findTaskImageByProjectId')
+  async findTaskImageByProject(@Body() project_id: string, type: string) {
+    return await this.taskimageService.findTaskImageByProjectId(project_id, type)
+  }
+
   @Post('queryImage')
   async queryImage(@Body() payload: QueryImage): Promise<TaskImageResponse> {
     return await this.taskimageService.QueryTaskImageHandler(payload);

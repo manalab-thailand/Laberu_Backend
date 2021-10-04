@@ -67,6 +67,17 @@ export class TaskimageService implements ITaskimageService {
     }
   }
 
+  async findTaskImageByProjectId(project_id: string, type: string) {
+    switch (type) {
+      case TaskimageService.LABELLING: {
+        return await this.taskImageObjectService.findTaskImageObjectByProjectId(project_id)
+      }
+      case TaskimageService.ANNOTATION: {
+        return await this.taskImageAnnotationService.findTaskImageAnnotationByProjectId(project_id)
+      }
+    }
+  }
+
   async QueryTaskImageHandler(payload: QueryImage): Promise<any> {
     const { type, ...data } = payload
     switch (type) {

@@ -75,6 +75,23 @@ export class TaskImageObjectService implements ITaskImageObjectService {
         )
     }
 
+    async findTaskImageObjectByProjectId(project_id: string) {
+        return await this.taskIamgeObjectModel.aggregate([
+            {
+                '$match': {
+                    'project_id': project_id
+                }
+            }, {
+                '$lookup': {
+                    'from': 'task_success_object',
+                    'localField': 'shortcode',
+                    'foreignField': 'shortcode',
+                    'as': 'result'
+                }
+            }
+        ])
+    }
+
     async findTaskImageObjectResidualWork(): Promise<any> {
         const taskImageResidualWork = await this.taskIamgeObjectModel.find({ status: true, process: false }).exec()
         return taskImageResidualWork.forEach(doc => {

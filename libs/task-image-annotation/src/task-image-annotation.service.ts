@@ -76,6 +76,29 @@ export class TaskImageAnnotationService implements ITaskImageAnnotationService {
         )
     }
 
+    async findTaskImageAnnotationByProjectId(project_id: string) {
+        return await this.taskIamgeAnnotationModel.aggregate([
+            {
+                '$match': {
+                    'project_id': project_id
+                }
+            }, {
+                '$lookup': {
+                    'from': 'task_success_annotation',
+                    'localField': 'shortcode',
+                    'foreignField': 'shortcode',
+                    'as': 'result'
+                }
+            }, {
+                '$project': {
+                    '_id': 0,
+                    'shortcode': 1,
+                    'result.description': 1
+                }
+            }
+        ])
+    };
+
     async findTaskImageAnnotationResidualWork(): Promise<any> {
         const taskImageResidualWork = await this.taskIamgeAnnotationModel.find({ status: true, process: false }).exec()
         return taskImageResidualWork.forEach(doc => {
