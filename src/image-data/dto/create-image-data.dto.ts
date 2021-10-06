@@ -10,6 +10,7 @@ export class CreateImageDataDto {
   object?: IObject;
   classification?: IClassification;
   project_id: string;
+  createAt: Date;
 
   constructor(payload: CreateImageDataDto) {
     Object.assign(this, payload);
