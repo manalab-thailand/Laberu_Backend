@@ -17,7 +17,7 @@ import { TaskSuccessModule } from './task-success/task-success.module';
           'DATABASE_USERNAME',
         )}:${configService.get(
           'DATABASE_PASSWORD',
-        )}@cluster0.ivm7n.mongodb.net/${configService.get('DATABASE_NAME')}`,
+        )}@laberu.frmke.mongodb.net/${configService.get('DATABASE_NAME')}`,
       }),
       inject: [ConfigService],
     }),

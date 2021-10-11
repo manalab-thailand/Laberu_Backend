@@ -22,16 +22,16 @@ export class User {
   @Prop()
   province: string;
 
-  @Prop({ enum: () => UserStatus })
+  @Prop({ type: UserStatus, enum: () => UserStatus })
   status: UserStatus;
 
-  @Prop({ enum: () => UserRole })
+  @Prop({ type: UserRole, enum: () => UserRole })
   role: UserRole;
 
   @Prop({ required: true })
   uid: string;
 
-  @Prop()
+  @Prop({ type: Object as () => IUserPayment })
   payment: IUserPayment;
 
   @Prop({ required: true })

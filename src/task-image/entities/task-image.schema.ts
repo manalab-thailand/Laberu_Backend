@@ -12,10 +12,10 @@ export class TaskImage {
   @Prop({ required: true })
   shortcode: string;
 
-  @Prop({ enum: () => TaskImageStatus })
+  @Prop({ type: TaskImageStatus, enum: () => TaskImageStatus })
   status: TaskImageStatus;
 
-  @Prop({ enum: () => TaskImageProcess })
+  @Prop({ type: TaskImageProcess, enum: () => TaskImageProcess })
   process: TaskImageProcess;
 
   @Prop()

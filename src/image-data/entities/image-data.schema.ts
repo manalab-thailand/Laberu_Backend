@@ -13,13 +13,13 @@ export class ImageData {
   @Prop({ required: true })
   shortcode: string;
 
-  @Prop({ required: false })
+  @Prop({ type: Object as () => IAnnotation, required: false })
   annotation: IAnnotation;
 
-  @Prop({ required: false })
+  @Prop({ type: Object as () => ILabelling, required: false })
   object: ILabelling;
 
-  @Prop({ required: false })
+  @Prop({ type: Object as () => IClassification, required: false })
   classification: IClassification;
 
   @Prop({ required: true })

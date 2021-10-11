@@ -18,13 +18,13 @@ export class Project {
   @Prop({ required: true })
   project_desc: string;
 
-  @Prop({ enum: () => ProjectType })
+  @Prop({ type: ProjectType, enum: () => ProjectType })
   project_type: ProjectType;
 
-  @Prop({ enum: () => ProjectLabelType })
+  @Prop({ type: ProjectLabelType, enum: () => ProjectLabelType })
   label_type: ProjectLabelType;
 
-  @Prop({ enum: () => ProjectImageType })
+  @Prop({ type: ProjectImageType, enum: () => ProjectImageType })
   image_type: ProjectImageType;
 
   @Prop({ required: true })
@@ -39,10 +39,10 @@ export class Project {
   @Prop({ required: true })
   require_custom: boolean;
 
-  @Prop({ required: true })
+  @Prop({ type: Object as () => IProjectConfigInput, required: true })
   config_input: IProjectConfigInput;
 
-  @Prop({ enum: () => ProjectProcess })
+  @Prop({ type: ProjectProcess, enum: () => ProjectProcess })
   process: ProjectProcess;
 
   @Prop({ required: true })

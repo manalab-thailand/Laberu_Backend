@@ -13,7 +13,7 @@ export class TaskSuccess {
   @Prop({ required: true })
   accept: boolean;
 
-  @Prop({ required: true })
+  @Prop({ type: Object as () => IResult, required: true })
   result: IResult;
 
   @Prop({ required: true })
@@ -25,10 +25,10 @@ export class TaskSuccess {
   @Prop({ required: true })
   project_id: string;
 
-  @Prop()
+  @Prop({ type: Object as () => ICustom })
   custom: ICustom;
 
-  @Prop({ enum: () => PaymentStatus })
+  @Prop({ type: PaymentStatus, enum: () => PaymentStatus })
   payment_status: PaymentStatus;
 
   @Prop()
