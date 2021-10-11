@@ -50,6 +50,12 @@ export class Project {
 
   @Prop({ required: true })
   createAt: Date;
+
+  @Prop({ required: true })
+  updatedAt: Date;
+
+  @Prop()
+  update_by: string | null;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

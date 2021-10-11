@@ -11,4 +11,9 @@ export class UpdateProjectDto {
   price_image: number;
   require_custom: boolean;
   config_input: IProjectConfigInput;
+  update_by: string;
+
+  constructor(payload: UpdateProjectDto) {
+    Object.assign(this, payload);
+  }
 }

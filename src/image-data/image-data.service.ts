@@ -16,6 +16,8 @@ export class ImageDataService {
     const createdImageData = new this.imageDataModel({
       ...payload,
       createAt: new Date(),
+      updatedAt: new Date(),
+      update_by: '',
     });
     return createdImageData.save();
   }

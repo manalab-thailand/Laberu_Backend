@@ -1,26 +1,56 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FindOneUserDto } from './dto/find-one-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User, UserDocument } from './entities/user.schema';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectModel(User.name)
+    private readonly userModel: Model<UserDocument>,
+  ) {}
+
+  async createUser(payload: CreateUserDto): Promise<User> {
+    const createdUser = new this.userModel({
+      ...payload,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      update_by: '',
+    });
+    return await createdUser.save();
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async createCustomer(payload: CreateCustomerDto): Promise<User> {
+    const createdCustomer = new this.userModel({
+      ...payload,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      update_by: '',
+    });
+    return await createdCustomer.save();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOneUser(payload: FindOneUserDto): Promise<User> {
+    const { user_id } = payload;
+    return await this.userModel.findById(user_id).exec();
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findAllUser(): Promise<User[]> {
+    return await this.userModel.find().exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async updateUser(payload: UpdateUserDto): Promise<User> {
+    const { user_id, ...data } = payload;
+    return await this.userModel
+      .findByIdAndUpdate(
+        user_id,
+        { ...data, updatedAt: new Date() },
+        { upsert: false },
+      )
+      .exec();
   }
 }

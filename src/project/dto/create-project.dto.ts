@@ -19,4 +19,8 @@ export class CreateProjectDto {
   config_input: IProjectConfigInput;
   process: ProjectProcess;
   project_owner: string;
+
+  constructor(payload: CreateProjectDto) {
+    Object.assign(this, payload);
+  }
 }

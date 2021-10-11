@@ -1,18 +1,15 @@
 import { UserStatus, UserRole } from '../interface/user.enum';
 import { IUserPayment } from '../interface/user.interface';
 
-export class CreateUserDto {
+export class CreateCustomerDto {
   firstname: string;
   lastname: string;
   phone_number: string;
-  career: string;
-  province: string;
   status: UserStatus;
   role: UserRole;
   uid: string;
-  payment: IUserPayment;
 
-  constructor(payload: CreateUserDto) {
+  constructor(payload: CreateCustomerDto) {
     Object.assign(this, payload);
   }
 }

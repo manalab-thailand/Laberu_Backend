@@ -19,6 +19,8 @@ export class ProjectService {
     const createdProject = new this.projectModel({
       ...payload,
       createAt: new Date(),
+      updatedAt: new Date(),
+      update_by: '',
     });
     return await createdProject.save();
   }
@@ -43,19 +45,23 @@ export class ProjectService {
 
   async updateProject(payload: UpdateProjectDto): Promise<Project> {
     const { project_id, ...data } = payload;
-    return await this.projectModel.findByIdAndUpdate(
-      project_id,
-      { ...data },
-      { upsert: false },
-    );
+    return await this.projectModel
+      .findByIdAndUpdate(
+        project_id,
+        { ...data, updatedAt: new Date() },
+        { upsert: false },
+      )
+      .exec();
   }
 
   async updateProjectSuccess(payload: UpdateProjectProcessDto) {
-    const { process, project_id } = payload;
-    return await this.projectModel.findByIdAndUpdate(
-      project_id,
-      { process },
-      { upsert: false },
-    );
+    const { process, project_id, update_by } = payload;
+    return await this.projectModel
+      .findByIdAndUpdate(
+        project_id,
+        { process, update_by, updatedAt: new Date() },
+        { upsert: false },
+      )
+      .exec();
   }
 }
