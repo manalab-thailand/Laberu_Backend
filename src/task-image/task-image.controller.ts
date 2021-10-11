@@ -1,34 +1,30 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CreateTaskImageManyDto } from './dto/create-task-image-many.dto';
+import { GetTaskImageDto } from './dto/get-task-image.dto';
+import { TaskImage } from './entities/task-image.schema';
 import { TaskImageService } from './task-image.service';
-import { CreateTaskImageDto } from './dto/create-task-image.dto';
-import { UpdateTaskImageDto } from './dto/update-task-image.dto';
 
 @Controller('task-image')
 export class TaskImageController {
   constructor(private readonly taskImageService: TaskImageService) {}
 
-  @Post()
-  create(@Body() createTaskImageDto: CreateTaskImageDto) {
-    return this.taskImageService.create(createTaskImageDto);
+  @Post('create-many')
+  async createTaskImageMany(
+    @Body() payload: CreateTaskImageManyDto,
+  ): Promise<TaskImage[]> {
+    return await this.taskImageService.createTaskImageMany(payload);
   }
 
-  @Get()
-  findAll() {
-    return this.taskImageService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskImageService.findOne(+id);
-  }
-
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateTaskImageDto: UpdateTaskImageDto) {
-    return this.taskImageService.update(+id, updateTaskImageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taskImageService.remove(+id);
+  @Post('get-task-image')
+  async getTaskImage(@Body() payload: GetTaskImageDto): Promise<TaskImage> {
+    return await this.taskImageService.getTaskImage(payload);
   }
 }

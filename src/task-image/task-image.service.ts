@@ -1,26 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTaskImageDto } from './dto/create-task-image.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateTaskImageManyDto } from './dto/create-task-image-many.dto';
+import { GetTaskImageDto } from './dto/get-task-image.dto';
 import { UpdateTaskImageDto } from './dto/update-task-image.dto';
+import { TaskImage, TaskImageDocument } from './entities/task-image.schema';
 
 @Injectable()
 export class TaskImageService {
-  create(createTaskImageDto: CreateTaskImageDto) {
-    return 'This action adds a new taskImage';
+  constructor(
+    @InjectModel(TaskImage.name)
+    private readonly taskImageModel: Model<TaskImageDocument>,
+  ) {}
+
+  async createTaskImageMany(
+    payload: CreateTaskImageManyDto,
+  ): Promise<TaskImage[]> {
+    const { mapTaskSuccess } = payload;
+    return await this.taskImageModel.insertMany(mapTaskSuccess);
   }
 
-  findAll() {
-    return `This action returns all taskImage`;
+  async getTaskImage(payload: GetTaskImageDto): Promise<TaskImage> {
+    const { project_id, user_id } = payload;
+    return await this.taskImageModel.findOne().exec();
+
+    //* 1) get task image where status = 'waiting' and process = 'doing'
+    //* 2) update task image status = 'doing'
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} taskImage`;
-  }
+  async updateTaskImage(payload: UpdateTaskImageDto): Promise<TaskImage> {
+    const { task_id } = payload;
+    return await this.taskImageModel.findByIdAndUpdate();
 
-  update(id: number, updateTaskImageDto: UpdateTaskImageDto) {
-    return `This action updates a #${id} taskImage`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} taskImage`;
+    //* After Create Task Success
+    //* 1) check count image of task
+    //* 2) if image success < label count
+    //* 2.1) update task status = 'waiting'
+    //* 3) else
+    //* 3.1) update task status = 'success' and task process = 'success'
   }
 }
