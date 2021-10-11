@@ -4,7 +4,7 @@ export interface IAnnotation {
 
 export interface IClassification {}
 
-export interface IObject {
+export interface ILabelling {
   width: string;
   height: string;
 }

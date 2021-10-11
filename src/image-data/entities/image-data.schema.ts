@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 import {
   IAnnotation,
   IClassification,
-  IObject,
+  ILabelling,
 } from '../interface/image-data.interface';
 
 export type ImageDataDocument = ImageData & Document;
@@ -17,7 +17,7 @@ export class ImageData {
   annotation: IAnnotation;
 
   @Prop({ required: false })
-  object: IObject;
+  object: ILabelling;
 
   @Prop({ required: false })
   classification: IClassification;

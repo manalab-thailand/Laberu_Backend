@@ -1,13 +1,13 @@
 import {
   IAnnotation,
   IClassification,
-  IObject,
+  ILabelling,
 } from '../interface/image-data.interface';
 
 export class CreateImageDataDto {
   shortcode: string;
   annotation?: IAnnotation;
-  object?: IObject;
+  object?: ILabelling;
   classification?: IClassification;
   project_id: string;
   createAt: Date;
