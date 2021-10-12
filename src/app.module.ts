@@ -8,6 +8,11 @@ import { ImageDataModule } from './image-data/image-data.module';
 import { ProjectModule } from './project/project.module';
 import { TaskImageModule } from './task-image/task-image.module';
 import { TaskSuccessModule } from './task-success/task-success.module';
+import { UserService } from './user/user.service';
+import { ImageDataService } from './image-data/image-data.service';
+import { ProjectService } from './project/project.service';
+import { TaskImageService } from './task-image/task-image.service';
+import { TaskSuccessService } from './task-success/task-success.service';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
