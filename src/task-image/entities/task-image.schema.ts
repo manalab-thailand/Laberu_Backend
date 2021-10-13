@@ -7,7 +7,7 @@ import {
 
 export type TaskImageDocument = TaskImage & Document;
 
-@Schema({ collection: 'task_image' })
+@Schema({ collection: 'task_image', versionKey: false })
 export class TaskImage {
   @Prop({ required: true })
   shortcode: string;

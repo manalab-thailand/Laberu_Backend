@@ -10,7 +10,7 @@ import { IProjectConfigInput } from '../interface/project.interface';
 
 export type ProjectDocument = Project & Document;
 
-@Schema({ collection: 'project' })
+@Schema({ collection: 'project', versionKey: false })
 export class Project {
   @Prop({ required: true })
   project_name: string;

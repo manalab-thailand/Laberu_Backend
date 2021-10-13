@@ -9,6 +9,7 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
@@ -21,7 +22,7 @@ import { UpdatePaymentStatusSuccess } from './dto/update-payment-status-success.
 import { TaskSuccess } from './entities/task-success.schema';
 import { TaskSuccessService } from './task-success.service';
 
-@UseGuards(JwtStrategy)
+@UseGuards(JwtAuthGuard)
 @Controller('task-success')
 export class TaskSuccessController {
   constructor(private readonly taskSuccessService: TaskSuccessService) {}

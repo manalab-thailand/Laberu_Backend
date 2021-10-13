@@ -7,7 +7,7 @@ import {
 export class CreateImageDataDto {
   shortcode: string;
   annotation?: IAnnotation;
-  object?: ILabelling;
+  labelling?: ILabelling;
   classification?: IClassification;
   project_id: string;
   createAt: Date;

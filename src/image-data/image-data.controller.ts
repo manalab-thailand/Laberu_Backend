@@ -22,7 +22,7 @@ export class ImageDataController {
   @HttpCode(200)
   @Post('create-many')
   async createManyImageData(
-    payload: CreateManyImageDataDto,
+    @Body() payload: CreateManyImageDataDto,
   ): Promise<ImageData[]> {
     return await this.imageDataService.createManyImageData(payload);
   }

@@ -8,7 +8,7 @@ import {
 
 export type ImageDataDocument = ImageData & Document;
 
-@Schema({ collection: 'image_data' })
+@Schema({ collection: 'image_data', versionKey: false })
 export class ImageData {
   @Prop({ required: true })
   shortcode: string;
@@ -17,7 +17,7 @@ export class ImageData {
   annotation: IAnnotation;
 
   @Prop({ type: Object as () => ILabelling, required: false })
-  object: ILabelling;
+  labelling: ILabelling;
 
   @Prop({ type: Object as () => IClassification, required: false })
   classification: IClassification;
@@ -26,7 +26,7 @@ export class ImageData {
   project_id: string;
 
   @Prop({ required: true })
-  createAt: Date;
+  createdAt: Date;
 
   @Prop({ required: true })
   updatedAt: Date;

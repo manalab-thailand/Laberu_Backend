@@ -5,7 +5,7 @@ import { ICustom, IResult } from '../interface/task-success.interface';
 
 export type TaskSuccessDocument = TaskSuccess & Document;
 
-@Schema({ collection: 'task_success' })
+@Schema({ collection: 'task_success', versionKey: false })
 export class TaskSuccess {
   @Prop({ required: true })
   shortcode: string;
