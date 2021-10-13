@@ -5,7 +5,7 @@ import { IUserPayment } from '../interface/user.interface';
 
 export type UserDocument = User & Document;
 
-@Schema({ collection: 'user' })
+@Schema({ collection: 'user', versionKey: false })
 export class User {
   @Prop({ required: true })
   firstname: string;

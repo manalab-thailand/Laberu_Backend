@@ -8,11 +8,7 @@ import { ImageDataModule } from './image-data/image-data.module';
 import { ProjectModule } from './project/project.module';
 import { TaskImageModule } from './task-image/task-image.module';
 import { TaskSuccessModule } from './task-success/task-success.module';
-import { UserService } from './user/user.service';
-import { ImageDataService } from './image-data/image-data.service';
-import { ProjectService } from './project/project.service';
-import { TaskImageService } from './task-image/task-image.service';
-import { TaskSuccessService } from './task-success/task-success.service';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -34,6 +30,7 @@ import { TaskSuccessService } from './task-success/task-success.service';
     ProjectModule,
     TaskImageModule,
     TaskSuccessModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

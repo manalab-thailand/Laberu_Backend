@@ -6,7 +6,10 @@ import {
   Put,
   Param,
   Delete,
+  HttpCode,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
 import { FindByProjectId } from './dto/find-by-project.dto';
@@ -18,10 +21,12 @@ import { UpdatePaymentStatusSuccess } from './dto/update-payment-status-success.
 import { TaskSuccess } from './entities/task-success.schema';
 import { TaskSuccessService } from './task-success.service';
 
+@UseGuards(JwtStrategy)
 @Controller('task-success')
 export class TaskSuccessController {
   constructor(private readonly taskSuccessService: TaskSuccessService) {}
 
+  @HttpCode(200)
   @Post('create')
   async createTaskSuccess(
     @Body() payload: CreateTaskSuccessDto,
@@ -29,6 +34,7 @@ export class TaskSuccessController {
     return await this.taskSuccessService.createTaskSuccess(payload);
   }
 
+  @HttpCode(200)
   @Post('find-by-project')
   async findTaskSuccessByProject(
     @Body() payload: FindByProjectId,
@@ -36,6 +42,7 @@ export class TaskSuccessController {
     return await this.taskSuccessService.findTaskSuccessByProject(payload);
   }
 
+  @HttpCode(200)
   @Post('find-by-user')
   async findTaskSuccessByUser(
     @Body() payload: FindByUserId,
@@ -43,6 +50,7 @@ export class TaskSuccessController {
     return await this.taskSuccessService.findTaskSuccessByUser(payload);
   }
 
+  @HttpCode(200)
   @Put('update-accept')
   async updateAcceptStatus(
     @Body() payload: UpdateAcceptStatus,
@@ -50,6 +58,7 @@ export class TaskSuccessController {
     return await this.taskSuccessService.updateAcceptStatus(payload);
   }
 
+  @HttpCode(200)
   @Put('update-accept-project')
   async updateAcceptStatusProject(
     @Body() payload: UpdateAcceptStatusProject,
@@ -57,6 +66,7 @@ export class TaskSuccessController {
     return await this.taskSuccessService.updateAcceptStatusProject(payload);
   }
 
+  @HttpCode(200)
   @Put('update-payment-status/doing')
   async updatePaymentStatusDoing(
     @Body() payload: UpdatePaymentStatusDoing,
@@ -64,6 +74,7 @@ export class TaskSuccessController {
     return await this.taskSuccessService.updatePaymentStatusDoing(payload);
   }
 
+  @HttpCode(200)
   @Put('update-payment-status/success')
   async updatePaymentStatusSuccess(
     @Body() payload: UpdatePaymentStatusSuccess,
@@ -71,6 +82,7 @@ export class TaskSuccessController {
     return await this.taskSuccessService.updatePaymentStatusSuccess(payload);
   }
 
+  @HttpCode(200)
   @Post('export-task-success')
   async exportTaskSuccess(
     @Body() payload: ExportTaskSuccessByProject,

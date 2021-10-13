@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.schema';
+import { UserStatus } from './interface/user.enum';
 
 @Injectable()
 export class UserService {
@@ -32,6 +33,12 @@ export class UserService {
       update_by: '',
     });
     return await createdCustomer.save();
+  }
+
+  async checkUserActive(uid: string): Promise<User> {
+    return await this.userModel
+      .findOne({ uid, status: UserStatus.ACTIVE })
+      .exec();
   }
 
   async findOneUser(payload: FindOneUserDto): Promise<User> {
