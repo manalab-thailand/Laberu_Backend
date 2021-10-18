@@ -6,6 +6,7 @@ export class CreateUserDto {
   lastname: string;
   phone_number: string;
   career: string;
+  email: string;
   province: string;
   status: UserStatus;
   role: UserRole;

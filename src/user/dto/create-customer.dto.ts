@@ -5,6 +5,7 @@ export class CreateCustomerDto {
   firstname: string;
   lastname: string;
   phone_number: string;
+  email: string;
   status: UserStatus;
   role: UserRole;
   uid: string;

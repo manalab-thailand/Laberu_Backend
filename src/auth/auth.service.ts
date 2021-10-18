@@ -25,16 +25,18 @@ export class AuthService {
 
     const jwt = await this.generateJwt(uid);
 
+    const authentication = {
+      access_token: jwt,
+      token_type: 'Bearer',
+      expiresIn: '1d',
+    };
+
     return {
       status: 200,
       message: 'success',
       data: {
         user,
-        jwt: {
-          access_token: jwt,
-          token_type: 'Bearer',
-          expiresIn: '1d',
-        },
+        authentication,
       },
     };
   }

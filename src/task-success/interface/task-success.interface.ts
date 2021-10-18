@@ -6,9 +6,9 @@ export interface ICustom {
 }
 
 export interface IResult {
-  annotation: IResultAnnotation;
-  labelling: IResultLabelling[];
-  classification: IResultClassification[];
+  annotation?: IResultAnnotation;
+  labelling?: IResultLabelling[];
+  classification?: IResultClassification[];
 }
 
 export interface IResultAnnotation {
