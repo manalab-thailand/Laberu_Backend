@@ -2,7 +2,7 @@ import { UserStatus, UserRole } from '../interface/user.enum';
 import { IUserPayment } from '../interface/user.interface';
 
 export class UpdateUserDto {
-  user_id: string;
+  _id: string;
   firstname: string;
   lastname: string;
   email: string;

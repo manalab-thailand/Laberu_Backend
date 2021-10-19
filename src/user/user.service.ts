@@ -51,12 +51,12 @@ export class UserService {
   }
 
   async updateUser(payload: UpdateUserDto): Promise<User> {
-    const { user_id, ...data } = payload;
+    const { _id, ...data } = payload;
     return await this.userModel
       .findByIdAndUpdate(
-        user_id,
+        _id,
         { ...data, updatedAt: new Date() },
-        { upsert: false },
+        { upsert: false, useFindAndModify: false },
       )
       .exec();
   }
