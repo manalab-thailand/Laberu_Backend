@@ -44,12 +44,12 @@ export class ProjectService {
   }
 
   async updateProject(payload: UpdateProjectDto): Promise<Project> {
-    const { project_id, ...data } = payload;
+    const { _id, ...data } = payload;
     return await this.projectModel
       .findByIdAndUpdate(
-        project_id,
+        _id,
         { ...data, updatedAt: new Date() },
-        { upsert: false },
+        { upsert: false, useFindAndModify: false },
       )
       .exec();
   }
@@ -60,7 +60,7 @@ export class ProjectService {
       .findByIdAndUpdate(
         project_id,
         { process, update_by, updatedAt: new Date() },
-        { upsert: false },
+        { upsert: false, useFindAndModify: false },
       )
       .exec();
   }
