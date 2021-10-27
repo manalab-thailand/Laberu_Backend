@@ -17,6 +17,7 @@ import { User } from './entities/user.schema';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ExportUserTaskSuccess } from './dto/export-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -54,5 +55,12 @@ export class UserController {
   @Put('update')
   async update(@Body() payload: UpdateUserDto): Promise<User> {
     return await this.userService.updateUser(payload);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
+  @Post('export-user')
+  async exportUser(@Body() payload: ExportUserTaskSuccess): Promise<any> {
+    return await this.userService.exportUserTaskSuccess(payload);
   }
 }

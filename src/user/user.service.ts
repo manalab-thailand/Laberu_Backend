@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ExportUserTaskSuccess } from './dto/export-user.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.schema';
@@ -59,5 +60,61 @@ export class UserService {
         { upsert: false, useFindAndModify: false },
       )
       .exec();
+  }
+
+  async exportUserTaskSuccess(payload: ExportUserTaskSuccess): Promise<any> {
+    const { project_id } = payload;
+    return await this.userModel.aggregate([
+      {
+        $project: {
+          _id: {
+            $toString: '$_id',
+          },
+          firstname: 1,
+          lastname: 1,
+          email: 1,
+          payment: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: 'task_success',
+          localField: '_id',
+          foreignField: 'user_id',
+          as: 'tasksuccess',
+        },
+      },
+      {
+        $match: {
+          tasksuccess: {
+            $gt: [
+              {
+                $size: '$tasksuccess',
+              },
+              0,
+            ],
+            $elemMatch: {
+              project_id,
+              payment_status: 'waiting',
+              paymentAt: null,
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          firstname: 1,
+          lastname: 1,
+          email: 1,
+          bank_name: '$payment.bank_name',
+          bank_account: '$payment.bank_account_name',
+          bank_account_no: '$payment.bank_account_no',
+          total: {
+            $size: '$tasksuccess',
+          },
+        },
+      },
+    ]);
   }
 }

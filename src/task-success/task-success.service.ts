@@ -73,10 +73,14 @@ export class TaskSuccessService {
   async updatePaymentStatusDoing(
     payload: UpdatePaymentStatusDoing,
   ): Promise<TaskSuccess[]> {
-    const { project_id, update_by } = payload;
+    const { project_id, update_by, array_id } = payload;
     return await this.taskSuccessModel
       .updateMany(
-        { project_id },
+        {
+          project_id,
+          payment_status: PaymentStatus.WAITING,
+          _id: { $in: array_id },
+        },
         {
           payment_status: PaymentStatus.DOING,
           update_by,
@@ -93,7 +97,7 @@ export class TaskSuccessService {
     const { project_id, update_by } = payload;
     return await this.taskSuccessModel
       .updateMany(
-        { project_id },
+        { project_id, payment_status: PaymentStatus.DOING },
         {
           payment_status: PaymentStatus.SUCCUSS,
           paymentAt: new Date(),
