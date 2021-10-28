@@ -28,6 +28,9 @@ export class TaskSuccess {
   @Prop({ type: Object as () => ICustom })
   custom: ICustom;
 
+  @Prop({ type: Number, required: true })
+  price: number;
+
   @Prop({ type: PaymentStatus, enum: () => PaymentStatus })
   payment_status: PaymentStatus;
 

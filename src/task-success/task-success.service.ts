@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Project, ProjectDocument } from 'src/project/entities/project.schema';
 import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
 import { FindByProjectId } from './dto/find-by-project.dto';
@@ -20,11 +21,19 @@ export class TaskSuccessService {
   constructor(
     @InjectModel(TaskSuccess.name)
     private readonly taskSuccessModel: Model<TaskSuccessDocument>,
+    @InjectModel(Project.name)
+    private readonly projectModel: Model<ProjectDocument>,
   ) {}
 
   async createTaskSuccess(payload: CreateTaskSuccessDto): Promise<TaskSuccess> {
+    const _project = await this.projectModel.findOne({
+      id: payload.project_id,
+    });
+
     const createdTaskSuccess = new this.taskSuccessModel({
       ...payload,
+      accept: true,
+      price: _project.price_image,
       payment_status: PaymentStatus.WAITING,
       paymentAt: null,
       createdAt: new Date(),

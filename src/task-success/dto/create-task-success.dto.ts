@@ -2,7 +2,6 @@ import { IResult, ICustom } from '../interface/task-success.interface';
 
 export class CreateTaskSuccessDto {
   shortcode: string;
-  accept: boolean;
   result: IResult;
   task_id: string;
   user_id: string;
