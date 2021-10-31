@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskImageManyDto } from './dto/create-task-image-many.dto';
+import { GetTaskImageByShortcode } from './dto/get-task-image-by-shortcode.dto';
 import { GetTaskImageDto } from './dto/get-task-image.dto';
 import { UpdateStatusTaskImageDto } from './dto/update-status-task-image.dto';
 import { TaskImage, TaskImageDocument } from './entities/task-image.schema';
+import { TaskImageProcess, TaskImageStatus } from './interface/task-image.enum';
 
 @Injectable()
 export class TaskImageService {
@@ -45,6 +47,13 @@ export class TaskImageService {
       .exec();
   }
 
+  async getTaskImageByShortcode(
+    payload: GetTaskImageByShortcode,
+  ): Promise<TaskImage> {
+    const { project_id, shortcode } = payload;
+    return await this.taskImageModel.findOne({ project_id, shortcode }).exec();
+  }
+
   async updateStatusTaskImage(
     payload: UpdateStatusTaskImageDto,
   ): Promise<TaskImage> {
@@ -57,5 +66,16 @@ export class TaskImageService {
         { upsert: false, useFindAndModify: false },
       )
       .exec();
+  }
+
+  async updateProcessTaskImage(task_id: string): Promise<TaskImage> {
+    return await this.taskImageModel.findByIdAndUpdate(
+      task_id,
+      {
+        process: TaskImageProcess.SUCCESS,
+        status: TaskImageStatus.SUCCESS,
+      },
+      { upsert: false, useFindAndModify: false },
+    );
   }
 }

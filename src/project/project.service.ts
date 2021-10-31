@@ -29,6 +29,10 @@ export class ProjectService {
     return await this.projectModel.find().exec();
   }
 
+  async findOne(project_id: string): Promise<Project> {
+    return await this.projectModel.findOne({ _id: project_id }).exec();
+  }
+
   async findProjectByUser(): Promise<Project[]> {
     return await this.projectModel
       .find({ process: ProjectProcess.DOING })

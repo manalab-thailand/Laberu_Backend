@@ -27,7 +27,7 @@ export class TaskSuccessService {
 
   async createTaskSuccess(payload: CreateTaskSuccessDto): Promise<TaskSuccess> {
     const _project = await this.projectModel.findOne({
-      id: payload.project_id,
+      _id: payload.project_id,
     });
 
     const createdTaskSuccess = new this.taskSuccessModel({
@@ -53,6 +53,12 @@ export class TaskSuccessService {
   async findTaskSuccessByUser(payload: FindByUserId): Promise<TaskSuccess[]> {
     const { user_id } = payload;
     return await this.taskSuccessModel.find({ user_id }).exec();
+  }
+
+  async findCountTaskSuccessByTaskId(task_id: string): Promise<Number> {
+    return await this.taskSuccessModel.countDocuments({
+      task_id,
+    });
   }
 
   async updateAcceptStatus(payload: UpdateAcceptStatus): Promise<TaskSuccess> {

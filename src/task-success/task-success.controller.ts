@@ -11,6 +11,8 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
+import { ProjectService } from 'src/project/project.service';
+import { TaskImageService } from 'src/task-image/task-image.service';
 import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
 import { FindByProjectId } from './dto/find-by-project.dto';
@@ -25,14 +27,39 @@ import { TaskSuccessService } from './task-success.service';
 @UseGuards(JwtAuthGuard)
 @Controller('task-success')
 export class TaskSuccessController {
-  constructor(private readonly taskSuccessService: TaskSuccessService) {}
+  constructor(
+    private readonly taskSuccessService: TaskSuccessService,
+    private readonly projectService: ProjectService,
+    private readonly taskImageService: TaskImageService,
+  ) {}
 
   @HttpCode(200)
   @Post('create')
   async createTaskSuccess(
     @Body() payload: CreateTaskSuccessDto,
   ): Promise<TaskSuccess> {
-    return await this.taskSuccessService.createTaskSuccess(payload);
+    const createdTaskSuccess = await this.taskSuccessService.createTaskSuccess(
+      payload,
+    );
+
+    const { project_id, shortcode } = createdTaskSuccess;
+
+    const _taskImage = (await this.taskImageService.getTaskImageByShortcode({
+      project_id,
+      shortcode,
+    })) as any;
+
+    const countTaskSuccess = await this.taskSuccessService.findCountTaskSuccessByTaskId(
+      _taskImage._id,
+    );
+
+    const _project = await this.projectService.findOne(project_id);
+
+    if (countTaskSuccess >= _project.label_count) {
+      await this.taskImageService.updateProcessTaskImage(_taskImage._id);
+    }
+
+    return createdTaskSuccess;
   }
 
   @HttpCode(200)
