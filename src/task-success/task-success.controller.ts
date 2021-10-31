@@ -42,21 +42,16 @@ export class TaskSuccessController {
       payload,
     );
 
-    const { project_id, shortcode } = createdTaskSuccess;
-
-    const _taskImage = (await this.taskImageService.getTaskImageByShortcode({
-      project_id,
-      shortcode,
-    })) as any;
+    const { project_id, task_id } = createdTaskSuccess;
 
     const countTaskSuccess = await this.taskSuccessService.findCountTaskSuccessByTaskId(
-      _taskImage._id,
+      task_id,
     );
 
     const _project = await this.projectService.findOne(project_id);
 
     if (countTaskSuccess >= _project.label_count) {
-      await this.taskImageService.updateProcessTaskImage(_taskImage._id);
+      await this.taskImageService.updateProcessTaskImage(task_id);
     }
 
     return createdTaskSuccess;
