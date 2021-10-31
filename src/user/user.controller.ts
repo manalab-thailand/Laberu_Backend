@@ -18,6 +18,7 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { FindOneUserDto } from './dto/find-one-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ExportUserTaskSuccess } from './dto/export-user.dto';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
