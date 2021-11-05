@@ -12,6 +12,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { ProjectService } from 'src/project/project.service';
+import { TaskImageStatus } from 'src/task-image/interface/task-image.enum';
 import { TaskImageService } from 'src/task-image/task-image.service';
 import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
@@ -52,6 +53,11 @@ export class TaskSuccessController {
 
     if (countTaskSuccess >= _project.label_count) {
       await this.taskImageService.updateProcessTaskImage(task_id);
+    } else {
+      await this.taskImageService.updateStatusTaskImage({
+        task_id,
+        status: TaskImageStatus.WAITING,
+      });
     }
 
     return createdTaskSuccess;
