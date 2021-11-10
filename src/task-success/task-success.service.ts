@@ -52,7 +52,43 @@ export class TaskSuccessService {
 
   async findTaskSuccessByUser(payload: FindByUserId): Promise<TaskSuccess[]> {
     const { user_id } = payload;
-    return await this.taskSuccessModel.find({ user_id }).exec();
+    return await this.taskSuccessModel.aggregate([
+      {
+        $match: {
+          user_id,
+        },
+      },
+      {
+        $group: {
+          _id: '$project_id',
+          total: {
+            $sum: '$price',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          project_id: {
+            $toObjectId: '$_id',
+          },
+          total: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: 'project',
+          localField: 'project_id',
+          foreignField: '_id',
+          as: 'project',
+        },
+      },
+      {
+        $unwind: {
+          path: '$project',
+        },
+      },
+    ]);
   }
 
   async findCountTaskSuccessByTaskId(task_id: string): Promise<Number> {
@@ -67,7 +103,7 @@ export class TaskSuccessService {
       .findByIdAndUpdate(
         task_success_id,
         { accept, update_by, updatedAt: new Date() },
-        { upsert: false },
+        { upsert: false, useFindAndModify: false },
       )
       .exec();
   }
