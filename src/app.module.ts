@@ -3,30 +3,36 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ImagedataModule } from './modules/imagedata/imagedata.module';
-import { UserModule } from './modules/user/user.module';
-import { ProjectmanagementModule } from './modules/projectmanagement/projectmanagement.module';
-import { TaskimageModule } from './modules/taskimage/taskimage.module';
-import { TasksuccessModule } from './modules/tasksuccess/tasksuccess.module';
+import { UserModule } from './user/user.module';
+import { ImageDataModule } from './image-data/image-data.module';
+import { ProjectModule } from './project/project.module';
+import { TaskImageModule } from './task-image/task-image.module';
+import { TaskSuccessModule } from './task-success/task-success.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        uri: `mongodb+srv://${configService.get('DATABASE_USERNAME')}:${configService.get('DATABASE_PASSWORD')}@cluster0.ivm7n.mongodb.net/${configService.get('DATABASE_NAME')}`
+        uri: `mongodb+srv://${configService.get(
+          'DATABASE_USERNAME',
+        )}:${configService.get(
+          'DATABASE_PASSWORD',
+        )}@laberu.frmke.mongodb.net/${configService.get('DATABASE_NAME')}`,
       }),
       inject: [ConfigService],
     }),
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
-    ImagedataModule,
-    ProjectmanagementModule,
     UserModule,
-    TaskimageModule,
-    TasksuccessModule,
+    ImageDataModule,
+    ProjectModule,
+    TaskImageModule,
+    TaskSuccessModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
