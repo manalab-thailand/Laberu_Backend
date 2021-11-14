@@ -55,30 +55,48 @@ export class TaskSuccessService {
     return await this.taskSuccessModel.aggregate([
       {
         $match: {
-          user_id,
+          user_id: user_id,
         },
       },
       {
         $group: {
-          _id: '$project_id',
+          _id: {
+            $toObjectId: '$project_id',
+          },
           total: {
+            $sum: 1,
+          },
+          total_price: {
             $sum: '$price',
           },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          project_id: {
-            $toObjectId: '$_id',
+          paid: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ['$payment_status', 'success'],
+                },
+                '$price',
+                0,
+              ],
+            },
           },
-          total: 1,
+          pending: {
+            $sum: {
+              $cond: [
+                {
+                  $ne: ['$payment_status', 'success'],
+                },
+                '$price',
+                0,
+              ],
+            },
+          },
         },
       },
       {
         $lookup: {
           from: 'project',
-          localField: 'project_id',
+          localField: '_id',
           foreignField: '_id',
           as: 'project',
         },
@@ -86,6 +104,17 @@ export class TaskSuccessService {
       {
         $unwind: {
           path: '$project',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          total: 1,
+          total_price: 1,
+          paid: 1,
+          pending: 1,
+          project_name: '$project.project_name',
+          label_type: '$project.label_type',
         },
       },
     ]);
@@ -124,13 +153,12 @@ export class TaskSuccessService {
   async updatePaymentStatusDoing(
     payload: UpdatePaymentStatusDoing,
   ): Promise<TaskSuccess[]> {
-    const { project_id, update_by, array_id } = payload;
+    const { project_id, update_by } = payload;
     return await this.taskSuccessModel
       .updateMany(
         {
           project_id,
           payment_status: PaymentStatus.WAITING,
-          _id: { $in: array_id },
         },
         {
           payment_status: PaymentStatus.DOING,
@@ -164,8 +192,57 @@ export class TaskSuccessService {
     payload: ExportTaskSuccessByProject,
   ): Promise<TaskSuccess[]> {
     const { project_id } = payload;
-    return await this.taskSuccessModel
-      .find({ project_id, accept: true })
-      .exec();
+    return await this.taskSuccessModel.aggregate([
+      {
+        $match: {
+          project_id,
+          payment_status: PaymentStatus.DOING,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $toObjectId: '$user_id',
+          },
+          price: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ['$payment_status', 'doing'],
+                },
+                '$price',
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'user',
+          localField: '_id',
+          foreignField: '_id',
+
+          as: 'user',
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          price: 1,
+          firstname: '$user.firstname',
+          lastname: '$user.lastname',
+          email: '$user.email',
+          bank_name: '$user.payment.bank_name',
+          bank_account_no: '$user.payment.bank_account_no',
+          bank_account_name: '$user.payment.bank_account_name',
+        },
+      },
+    ]);
   }
 }
