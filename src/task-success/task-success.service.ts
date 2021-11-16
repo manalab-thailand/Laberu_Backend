@@ -180,8 +180,8 @@ export class TaskSuccessService {
         {
           payment_status: PaymentStatus.SUCCUSS,
           paymentAt: new Date(),
-          update_by,
           updatedAt: new Date(),
+          update_by,
         },
         { upsert: false },
       )

@@ -6,7 +6,10 @@ import {
   ProjectType,
   ProjectProcess,
 } from '../interface/project.enum';
-import { IProjectConfigInput } from '../interface/project.interface';
+import {
+  ICustomAttribute,
+  IProjectConfigInput,
+} from '../interface/project.interface';
 
 export type ProjectDocument = Project & Document;
 
@@ -39,7 +42,10 @@ export class Project {
   @Prop({ required: true })
   require_custom: boolean;
 
-  @Prop({ type: Object as () => IProjectConfigInput, required: true })
+  @Prop({ type: Object as () => ICustomAttribute[], required: false })
+  custom_attribute: ICustomAttribute[];
+
+  @Prop({ type: Object as () => IProjectConfigInput[], required: true })
   config_input: IProjectConfigInput;
 
   @Prop({ type: ProjectProcess, enum: () => ProjectProcess })
@@ -49,7 +55,7 @@ export class Project {
   project_owner: string;
 
   @Prop({ required: true })
-  createAt: Date;
+  createdAt: Date;
 
   @Prop({ required: true })
   updatedAt: Date;

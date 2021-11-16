@@ -9,6 +9,7 @@ import { ProjectModule } from './project/project.module';
 import { TaskImageModule } from './task-image/task-image.module';
 import { TaskSuccessModule } from './task-success/task-success.module';
 import { AuthModule } from './auth/auth.module';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -25,6 +26,7 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     ImageDataModule,
     ProjectModule,
