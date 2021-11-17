@@ -45,7 +45,7 @@ export class Project {
   @Prop({ type: Object as () => ICustomAttribute[], required: false })
   custom_attribute: ICustomAttribute[];
 
-  @Prop({ type: Object as () => IProjectConfigInput[], required: true })
+  @Prop({ type: Object as () => IProjectConfigInput, required: true })
   config_input: IProjectConfigInput;
 
   @Prop({ type: ProjectProcess, enum: () => ProjectProcess })
