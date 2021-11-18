@@ -52,6 +52,7 @@ export class ProjectController {
   @HttpCode(200)
   @Put('update')
   async updateProject(@Body() payload: UpdateProjectDto): Promise<Project> {
+    console.log('🚀 ~ payload', payload);
     return await this.projectService.updateProject(payload);
   }
 

@@ -24,7 +24,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "gcloud-deploy": "gcloud builds submit --tag gcr.io/laberu/new-laberu . && gcloud run deploy new-laberu --image gcr.io/laberu/new-laberu --region asia-southeast1"
+    "gcloud-deploy": "docker build -t new-laberu . && gcloud builds submit --tag gcr.io/laberu/new-laberu . && gcloud run deploy new-laberu --image gcr.io/laberu/new-laberu --region asia-southeast1 && docker rmi -f new-laberu"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",

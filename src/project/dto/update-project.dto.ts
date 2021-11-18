@@ -15,7 +15,7 @@ export class UpdateProjectDto {
   label_count: number;
   price_image: number;
   require_custom: boolean;
-  custom_attrbute: ICustomAttribute[];
+  custom_attribute: ICustomAttribute[];
   config_input: IProjectConfigInput;
   access_password: string | null;
   export_password: string | null;
