@@ -45,6 +45,12 @@ export class Project {
   @Prop({ type: Object as () => ICustomAttribute[], required: false })
   custom_attribute: ICustomAttribute[];
 
+  @Prop({ required: false })
+  access_password: string | null;
+
+  @Prop({ required: false })
+  export_password: string | null;
+
   @Prop({ type: Object as () => IProjectConfigInput, required: true })
   config_input: IProjectConfigInput;
 

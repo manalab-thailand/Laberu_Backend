@@ -17,6 +17,8 @@ export class UpdateProjectDto {
   require_custom: boolean;
   custom_attrbute: ICustomAttribute[];
   config_input: IProjectConfigInput;
+  access_password: string | null;
+  export_password: string | null;
   update_by: string;
 
   constructor(payload: UpdateProjectDto) {

@@ -23,6 +23,7 @@ export class CreateProjectDto {
   config_input: IProjectConfigInput;
   process: ProjectProcess;
   project_owner: string;
+  access_password: string | null;
 
   constructor(payload: CreateProjectDto) {
     Object.assign(this, payload);

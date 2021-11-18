@@ -18,6 +18,7 @@ export class ProjectService {
   async create(payload: CreateProjectDto): Promise<Project> {
     const createdProject = new this.projectModel({
       ...payload,
+      export_password: null,
       createdAt: new Date(),
       updatedAt: new Date(),
       update_by: '',
