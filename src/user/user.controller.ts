@@ -27,6 +27,7 @@ export class UserController {
   @HttpCode(200)
   @Post('create-user')
   async createUser(@Body() payload: CreateUserDto): Promise<User> {
+    console.log('🚀 ~ payload', payload);
     return await this.userService.createUser(payload);
   }
 

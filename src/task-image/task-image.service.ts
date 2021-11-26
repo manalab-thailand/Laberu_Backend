@@ -83,7 +83,7 @@ export class TaskImageService {
   }
 
   validateHour(date) {
-    return Number(moment().diff(moment(date), 'hours', true).toFixed(0));
+    return Number(moment().diff(moment(date), 'hours'));
   }
 
   async resetTask() {
@@ -98,7 +98,7 @@ export class TaskImageService {
 
       if (taskImages) {
         const listId = taskImages
-          .filter((taskImage) => this.validateHour(taskImage.doingAt) >= 2)
+          .filter((taskImage) => this.validateHour(taskImage.doingAt) > 2)
           .map((taskImage) => taskImage._id);
 
         if (listId) {
