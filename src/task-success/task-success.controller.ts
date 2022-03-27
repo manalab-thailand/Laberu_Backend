@@ -65,17 +65,13 @@ export class TaskSuccessController {
 
   @HttpCode(200)
   @Post('find-by-project')
-  async findTaskSuccessByProject(
-    @Body() payload: FindByProjectId,
-  ): Promise<TaskSuccess[]> {
+  async findTaskSuccessByProject(@Body() payload: FindByProjectId) {
     return await this.taskSuccessService.findTaskSuccessByProject(payload);
   }
 
   @HttpCode(200)
   @Post('find-by-user')
-  async findTaskSuccessByUser(
-    @Body() payload: FindByUserId,
-  ): Promise<TaskSuccess[]> {
+  async findTaskSuccessByUser(@Body() payload: FindByUserId) {
     return await this.taskSuccessService.findTaskSuccessByUser(payload);
   }
 
@@ -89,17 +85,13 @@ export class TaskSuccessController {
 
   @HttpCode(200)
   @Put('update-accept-project')
-  async updateAcceptStatusProject(
-    @Body() payload: UpdateAcceptStatusProject,
-  ): Promise<TaskSuccess[]> {
+  async updateAcceptStatusProject(@Body() payload: UpdateAcceptStatusProject) {
     return await this.taskSuccessService.updateAcceptStatusProject(payload);
   }
 
   @HttpCode(200)
   @Put('update-payment-status/doing')
-  async updatePaymentStatusDoing(
-    @Body() payload: UpdatePaymentStatusDoing,
-  ): Promise<TaskSuccess[]> {
+  async updatePaymentStatusDoing(@Body() payload: UpdatePaymentStatusDoing) {
     return await this.taskSuccessService.updatePaymentStatusDoing(payload);
   }
 
@@ -107,15 +99,13 @@ export class TaskSuccessController {
   @Put('update-payment-status/success')
   async updatePaymentStatusSuccess(
     @Body() payload: UpdatePaymentStatusSuccess,
-  ): Promise<TaskSuccess[]> {
+  ) {
     return await this.taskSuccessService.updatePaymentStatusSuccess(payload);
   }
 
   @HttpCode(200)
   @Post('export-task-success')
-  async exportTaskSuccess(
-    @Body() payload: ExportTaskSuccessByProject,
-  ): Promise<TaskSuccess[]> {
+  async exportTaskSuccess(@Body() payload: ExportTaskSuccessByProject) {
     return await this.taskSuccessService.exportTaskSuccessByProject(payload);
   }
 }

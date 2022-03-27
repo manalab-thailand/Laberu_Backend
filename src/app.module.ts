@@ -10,6 +10,7 @@ import { TaskImageModule } from './task-image/task-image.module';
 import { TaskSuccessModule } from './task-success/task-success.module';
 import { AuthModule } from './auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ScheduleTaskImageModule } from './schedule/schedule.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -33,6 +34,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     TaskImageModule,
     TaskSuccessModule,
     AuthModule,
+    ScheduleTaskImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
