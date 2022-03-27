@@ -15,3 +15,8 @@ export interface IClassificationConfigInput {
   display_name: string;
   value: string;
 }
+
+export interface ICustomAttribute {
+  display_name: string;
+  value: string;
+}

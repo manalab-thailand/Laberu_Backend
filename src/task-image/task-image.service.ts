@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { Model } from 'mongoose';
 import { CreateTaskImageManyDto } from './dto/create-task-image-many.dto';
 import { GetTaskImageByShortcode } from './dto/get-task-image-by-shortcode.dto';
@@ -7,6 +8,7 @@ import { GetTaskImageDto } from './dto/get-task-image.dto';
 import { UpdateStatusTaskImageDto } from './dto/update-status-task-image.dto';
 import { TaskImage, TaskImageDocument } from './entities/task-image.schema';
 import { TaskImageProcess, TaskImageStatus } from './interface/task-image.enum';
+import * as moment from 'moment';
 
 @Injectable()
 export class TaskImageService {
@@ -62,7 +64,7 @@ export class TaskImageService {
     return await this.taskImageModel
       .findByIdAndUpdate(
         task_id,
-        { status },
+        { status, doingAt: new Date() },
         { upsert: false, useFindAndModify: false },
       )
       .exec();
@@ -72,6 +74,7 @@ export class TaskImageService {
     return await this.taskImageModel.findByIdAndUpdate(
       task_id,
       {
+        doneAt: new Date(),
         process: TaskImageProcess.SUCCESS,
         status: TaskImageStatus.SUCCESS,
       },

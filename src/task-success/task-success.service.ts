@@ -137,9 +137,7 @@ export class TaskSuccessService {
       .exec();
   }
 
-  async updateAcceptStatusProject(
-    payload: UpdateAcceptStatusProject,
-  ): Promise<TaskSuccess[]> {
+  async updateAcceptStatusProject(payload: UpdateAcceptStatusProject) {
     const { accept, project_id, update_by } = payload;
     return await this.taskSuccessModel
       .updateMany(
@@ -150,9 +148,7 @@ export class TaskSuccessService {
       .exec();
   }
 
-  async updatePaymentStatusDoing(
-    payload: UpdatePaymentStatusDoing,
-  ): Promise<TaskSuccess[]> {
+  async updatePaymentStatusDoing(payload: UpdatePaymentStatusDoing) {
     const { project_id, update_by } = payload;
     return await this.taskSuccessModel
       .updateMany(
@@ -170,9 +166,7 @@ export class TaskSuccessService {
       .exec();
   }
 
-  async updatePaymentStatusSuccess(
-    payload: UpdatePaymentStatusSuccess,
-  ): Promise<TaskSuccess[]> {
+  async updatePaymentStatusSuccess(payload: UpdatePaymentStatusSuccess) {
     const { project_id, update_by } = payload;
     return await this.taskSuccessModel
       .updateMany(
@@ -180,8 +174,8 @@ export class TaskSuccessService {
         {
           payment_status: PaymentStatus.SUCCUSS,
           paymentAt: new Date(),
-          update_by,
           updatedAt: new Date(),
+          update_by,
         },
         { upsert: false },
       )

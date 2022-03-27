@@ -4,7 +4,10 @@ import {
   ProjectImageType,
   ProjectProcess,
 } from '../interface/project.enum';
-import { IProjectConfigInput } from '../interface/project.interface';
+import {
+  ICustomAttribute,
+  IProjectConfigInput,
+} from '../interface/project.interface';
 
 export class CreateProjectDto {
   project_name: string;
@@ -16,9 +19,11 @@ export class CreateProjectDto {
   label_count: number;
   price_image: number;
   require_custom: boolean;
+  custom_attrbute: ICustomAttribute[];
   config_input: IProjectConfigInput;
   process: ProjectProcess;
   project_owner: string;
+  access_password: string | null;
 
   constructor(payload: CreateProjectDto) {
     Object.assign(this, payload);

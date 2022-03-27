@@ -14,6 +14,7 @@ import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { ImageDataService } from 'src/image-data/image-data.service';
 import { CreateTaskImageManyDto } from './dto/create-task-image-many.dto';
 import { GetTaskImageDto } from './dto/get-task-image.dto';
+import { UpdateStatusTaskImageDto } from './dto/update-status-task-image.dto';
 import { TaskImage } from './entities/task-image.schema';
 import { TaskImageStatus } from './interface/task-image.enum';
 import { TaskImageService } from './task-image.service';
@@ -66,5 +67,13 @@ export class TaskImageController {
         image_data: imagedata,
       },
     };
+  }
+
+  @HttpCode(200)
+  @Put('update-status-task')
+  async updateStatusTask(
+    @Body() payload: UpdateStatusTaskImageDto,
+  ): Promise<any> {
+    return await this.taskImageService.updateStatusTaskImage(payload);
   }
 }

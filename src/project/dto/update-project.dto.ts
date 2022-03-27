@@ -1,5 +1,8 @@
 import { ProjectImageType, ProjectProcess } from '../interface/project.enum';
-import { IProjectConfigInput } from '../interface/project.interface';
+import {
+  ICustomAttribute,
+  IProjectConfigInput,
+} from '../interface/project.interface';
 
 export class UpdateProjectDto {
   _id: string;
@@ -12,7 +15,10 @@ export class UpdateProjectDto {
   label_count: number;
   price_image: number;
   require_custom: boolean;
+  custom_attribute: ICustomAttribute[];
   config_input: IProjectConfigInput;
+  access_password: string | null;
+  export_password: string | null;
   update_by: string;
 
   constructor(payload: UpdateProjectDto) {

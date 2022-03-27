@@ -37,9 +37,7 @@ export class UserService {
   }
 
   async checkUserActive(uid: string): Promise<User> {
-    return await this.userModel
-      .findOne({ uid, status: UserStatus.ACTIVE })
-      .exec();
+    return await this.userModel.findOne({ uid }).exec();
   }
 
   async findOneUser(payload: FindOneUserDto): Promise<User> {
