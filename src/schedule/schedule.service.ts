@@ -19,7 +19,7 @@ export class ScheduleTaskImageService {
     private readonly taskImageModel: Model<TaskImageDocument>,
   ) {}
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_5_SECONDS)
   async handleCron() {
     const taskImages = await this.taskImageModel.find({
       status: TaskImageStatus.DOING,
@@ -28,6 +28,8 @@ export class ScheduleTaskImageService {
         $ne: null,
       },
     });
+
+    if (!taskImages.length) return;
 
     const listIds = taskImages
       .filter((x) => moment().diff(x.doingAt, 'hours') > 2)
