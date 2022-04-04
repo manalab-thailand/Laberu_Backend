@@ -24,6 +24,26 @@ export class TaskImageService {
     return await this.taskImageModel.insertMany(mapTaskSuccess);
   }
 
+  async getCountTaskImageByProjectId(payload: { project_id: string }) {
+    const total = await this.taskImageModel
+      .countDocuments({
+        project_id: payload.project_id,
+      })
+      .exec();
+
+    const success = await this.taskImageModel
+      .countDocuments({
+        project_id: payload.project_id,
+        process: TaskImageProcess.SUCCESS,
+      })
+      .exec();
+
+    return {
+      total,
+      success,
+    };
+  }
+
   async getTaskImage(payload: GetTaskImageDto): Promise<TaskImage> {
     const { project_id, user_id } = payload;
     return await this.taskImageModel

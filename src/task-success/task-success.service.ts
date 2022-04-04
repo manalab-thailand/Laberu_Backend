@@ -6,6 +6,7 @@ import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
 import { FindByProjectId } from './dto/find-by-project.dto';
 import { FindByUserId } from './dto/find-by-user.dto';
+import { GetReportUser } from './dto/get-report-user';
 import { UpdateAcceptStatusProject } from './dto/update-accept-status-project.dto';
 import { UpdateAcceptStatus } from './dto/update-accept-status.dto';
 import { UpdatePaymentStatusDoing } from './dto/update-payment-status-doing.dto';
@@ -43,11 +44,22 @@ export class TaskSuccessService {
     return await createdTaskSuccess.save();
   }
 
+  async findCountTaskSuccessByProject(
+    payload: FindByProjectId,
+  ): Promise<Number> {
+    const { project_id } = payload;
+    return await this.taskSuccessModel.countDocuments({ project_id });
+  }
+
   async findTaskSuccessByProject(
     payload: FindByProjectId,
   ): Promise<TaskSuccess[]> {
-    const { project_id } = payload;
-    return await this.taskSuccessModel.find({ project_id }).exec();
+    const { project_id, limit, skip } = payload;
+    return await this.taskSuccessModel
+      .find({ project_id })
+      .limit(limit ? Number(limit) : 10)
+      .skip(skip ? Number(skip) : 0)
+      .exec();
   }
 
   async findTaskSuccessByUser(payload: FindByUserId): Promise<TaskSuccess[]> {
@@ -182,6 +194,156 @@ export class TaskSuccessService {
       .exec();
   }
 
+  async getCountReportUser(payload: GetReportUser) {
+    const query = await this.taskSuccessModel.aggregate([
+      {
+        $match: {
+          project_id: payload.project_id,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $toObjectId: '$user_id',
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'user',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ]);
+
+    return (query as any)[0].count;
+  }
+
+  async getReportUser(payload: GetReportUser) {
+    return await this.taskSuccessModel.aggregate([
+      [
+        {
+          $match: {
+            project_id: payload.project_id,
+          },
+        },
+        {
+          $group: {
+            _id: {
+              $toObjectId: '$user_id',
+            },
+            price: {
+              $sum: {
+                $cond: [
+                  {
+                    $eq: ['$payment_status', 'waiting'],
+                  },
+                  '$price',
+                  0,
+                ],
+              },
+            },
+            total: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: '_id',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $unwind: {
+            path: '$user',
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            price: 1,
+            total: '$total',
+            firstname: '$user.firstname',
+            lastname: '$user.lastname',
+            email: '$user.email',
+            bank_name: '$user.payment.bank_name',
+            bank_account_no: '$user.payment.bank_account_no',
+            bank_account_name: '$user.payment.bank_account_name',
+          },
+        },
+        {
+          $skip: payload.skip ? Number(payload.skip) : 0,
+        },
+        {
+          $limit: payload.limit ? Number(payload.limit) : 10,
+        },
+      ],
+    ]);
+  }
+
+  async getCountReportPrice(payload: { project_id: string }) {
+    return await this.taskSuccessModel
+      .aggregate([
+        {
+          $match: {
+            project_id: payload.project_id,
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: 1,
+            },
+            total_price: {
+              $sum: '$price',
+            },
+            paid: {
+              $sum: {
+                $cond: [
+                  {
+                    $eq: ['$payment_status', 'success'],
+                  },
+                  '$price',
+                  0,
+                ],
+              },
+            },
+            pending: {
+              $sum: {
+                $cond: [
+                  {
+                    $ne: ['$payment_status', 'success'],
+                  },
+                  '$price',
+                  0,
+                ],
+              },
+            },
+          },
+        },
+      ])
+      .exec();
+  }
+
   async exportTaskSuccessByProject(
     payload: ExportTaskSuccessByProject,
   ): Promise<TaskSuccess[]> {
@@ -216,7 +378,6 @@ export class TaskSuccessService {
           from: 'user',
           localField: '_id',
           foreignField: '_id',
-
           as: 'user',
         },
       },

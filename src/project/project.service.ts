@@ -27,11 +27,62 @@ export class ProjectService {
   }
 
   async findAll(): Promise<Project[]> {
-    return await this.projectModel.find().exec();
+    return await this.projectModel
+      .aggregate([
+        {
+          $addFields: {
+            user_id: {
+              $toObjectId: '$project_owner',
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $unwind: {
+            path: '$user',
+          },
+        },
+      ])
+      .exec();
   }
 
   async findOne(project_id: string): Promise<Project> {
-    return await this.projectModel.findOne({ _id: project_id }).exec();
+    return await this.projectModel
+      .aggregate([
+        {
+          $match: {
+            _id: project_id,
+          },
+        },
+        {
+          $addFields: {
+            user_id: {
+              $toObjectId: '$project_owner',
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $unwind: {
+            path: '$user',
+          },
+        },
+      ])
+      .exec();
   }
 
   async findProjectByUser(): Promise<Project[]> {
@@ -44,7 +95,33 @@ export class ProjectService {
     payload: FindProjectByCustomerDto,
   ): Promise<Project[]> {
     return await this.projectModel
-      .find({ project_owner: payload.user_id })
+      .aggregate([
+        {
+          $match: {
+            project_owner: payload.user_id,
+          },
+        },
+        {
+          $addFields: {
+            user_id: {
+              $toObjectId: '$project_owner',
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $unwind: {
+            path: '$user',
+          },
+        },
+      ])
       .exec();
   }
 

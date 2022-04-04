@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
@@ -18,6 +19,7 @@ import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
 import { FindByProjectId } from './dto/find-by-project.dto';
 import { FindByUserId } from './dto/find-by-user.dto';
+import { GetReportUser } from './dto/get-report-user';
 import { UpdateAcceptStatusProject } from './dto/update-accept-status-project.dto';
 import { UpdateAcceptStatus } from './dto/update-accept-status.dto';
 import { UpdatePaymentStatusDoing } from './dto/update-payment-status-doing.dto';
@@ -64,9 +66,15 @@ export class TaskSuccessController {
   }
 
   @HttpCode(200)
-  @Post('find-by-project')
-  async findTaskSuccessByProject(@Body() payload: FindByProjectId) {
+  @Get('find-by-project')
+  async findTaskSuccessByProject(@Query() payload: FindByProjectId) {
     return await this.taskSuccessService.findTaskSuccessByProject(payload);
+  }
+
+  @HttpCode(200)
+  @Get('find-by-project/count')
+  async findCounnTaskSuccessByProject(@Query() payload: FindByProjectId) {
+    return await this.taskSuccessService.findCountTaskSuccessByProject(payload);
   }
 
   @HttpCode(200)
@@ -107,5 +115,23 @@ export class TaskSuccessController {
   @Post('export-task-success')
   async exportTaskSuccess(@Body() payload: ExportTaskSuccessByProject) {
     return await this.taskSuccessService.exportTaskSuccessByProject(payload);
+  }
+
+  @HttpCode(200)
+  @Get('get-report-user/count')
+  async getCountReportUser(@Query() payload: GetReportUser) {
+    return await this.taskSuccessService.getCountReportUser(payload);
+  }
+
+  @HttpCode(200)
+  @Get('get-report-user')
+  async getReportUser(@Query() payload: GetReportUser) {
+    return await this.taskSuccessService.getReportUser(payload);
+  }
+
+  @HttpCode(200)
+  @Get('get-count-report-price')
+  async getCountReportPrice(@Query() payload: GetReportUser) {
+    return await this.taskSuccessService.getCountReportPrice(payload);
   }
 }

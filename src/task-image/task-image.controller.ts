@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
@@ -67,6 +68,12 @@ export class TaskImageController {
         image_data: imagedata,
       },
     };
+  }
+
+  @HttpCode(200)
+  @Get('get-count-by-project')
+  async getCountTaskImageByProject(@Query() payload: { project_id: string }) {
+    return await this.taskImageService.getCountTaskImageByProjectId(payload);
   }
 
   @HttpCode(200)
