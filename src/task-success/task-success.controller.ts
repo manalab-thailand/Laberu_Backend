@@ -10,6 +10,7 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
+import { FilterQuery } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { ProjectService } from 'src/project/project.service';
@@ -24,10 +25,13 @@ import { UpdateAcceptStatusProject } from './dto/update-accept-status-project.dt
 import { UpdateAcceptStatus } from './dto/update-accept-status.dto';
 import { UpdatePaymentStatusDoing } from './dto/update-payment-status-doing.dto';
 import { UpdatePaymentStatusSuccess } from './dto/update-payment-status-success.dto';
-import { TaskSuccess } from './entities/task-success.schema';
+import {
+  TaskSuccess,
+  TaskSuccessDocument,
+} from './entities/task-success.schema';
 import { TaskSuccessService } from './task-success.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('task-success')
 export class TaskSuccessController {
   constructor(
@@ -81,6 +85,12 @@ export class TaskSuccessController {
   @Post('find-by-user')
   async findTaskSuccessByUser(@Body() payload: FindByUserId) {
     return await this.taskSuccessService.findTaskSuccessByUser(payload);
+  }
+
+  @HttpCode(200)
+  @Get('history')
+  async findHistory(@Query() payload: FilterQuery<TaskSuccessDocument>) {
+    return await this.taskSuccessService.findHistory(payload);
   }
 
   @HttpCode(200)

@@ -20,7 +20,7 @@ import { TaskImage } from './entities/task-image.schema';
 import { TaskImageStatus } from './interface/task-image.enum';
 import { TaskImageService } from './task-image.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('task-image')
 export class TaskImageController {
   constructor(

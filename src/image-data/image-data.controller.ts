@@ -14,7 +14,7 @@ import { CreateManyImageDataDto } from './dto/create-many-image-data.dto';
 import { ImageData } from './entities/image-data.schema';
 import { ImageDataService } from './image-data.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('image-data')
 export class ImageDataController {
   constructor(private readonly imageDataService: ImageDataService) {}

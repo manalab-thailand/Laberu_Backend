@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model, Query } from 'mongoose';
 import { Project, ProjectDocument } from 'src/project/entities/project.schema';
 import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
 import { ExportTaskSuccessByProject } from './dto/export-task-success-by-project.dto';
@@ -47,18 +47,99 @@ export class TaskSuccessService {
   async findCountTaskSuccessByProject(
     payload: FindByProjectId,
   ): Promise<Number> {
-    const { project_id } = payload;
-    return await this.taskSuccessModel.countDocuments({ project_id });
+    const { project_id, ...query } = payload;
+    const count = await this.taskSuccessModel
+      .aggregate([
+        {
+          $match: {
+            project_id: project_id,
+          },
+        },
+        {
+          $addFields: {
+            userId: {
+              $toObjectId: '$user_id',
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $unwind: {
+            path: '$user',
+          },
+        },
+        {
+          $match: query,
+        },
+        {
+          $group: {
+            _id: null,
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ])
+      .allowDiskUse(true)
+      .exec();
+
+    return count[0].count;
   }
 
   async findTaskSuccessByProject(
     payload: FindByProjectId,
   ): Promise<TaskSuccess[]> {
-    const { project_id, limit, skip } = payload;
+    const { project_id, limit, skip, ...query } = payload;
     return await this.taskSuccessModel
-      .find({ project_id })
-      .limit(limit ? Number(limit) : 10)
-      .skip(skip ? Number(skip) : 0)
+      .aggregate([
+        {
+          $match: {
+            project_id: project_id,
+          },
+        },
+        {
+          $addFields: {
+            userId: {
+              $toObjectId: '$user_id',
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $unwind: {
+            path: '$user',
+          },
+        },
+        {
+          $match: query,
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $skip: skip ? Number(skip) : 0,
+        },
+        {
+          $limit: limit ? Number(limit) : 10,
+        },
+      ])
+      .allowDiskUse(true)
       .exec();
   }
 
@@ -132,6 +213,14 @@ export class TaskSuccessService {
     ]);
   }
 
+  async findHistory(query: FilterQuery<TaskSuccessDocument>) {
+    return await this.taskSuccessModel
+      .find(query)
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .exec();
+  }
+
   async findCountTaskSuccessByTaskId(task_id: string): Promise<Number> {
     return await this.taskSuccessModel.countDocuments({
       task_id,
@@ -195,10 +284,12 @@ export class TaskSuccessService {
   }
 
   async getCountReportUser(payload: GetReportUser) {
-    const query = await this.taskSuccessModel.aggregate([
+    const { limit, skip, project_id, ...query } = payload;
+
+    const count = await this.taskSuccessModel.aggregate([
       {
         $match: {
-          project_id: payload.project_id,
+          project_id: project_id,
         },
       },
       {
@@ -222,6 +313,9 @@ export class TaskSuccessService {
         },
       },
       {
+        $match: query,
+      },
+      {
         $group: {
           _id: null,
           count: {
@@ -231,10 +325,11 @@ export class TaskSuccessService {
       },
     ]);
 
-    return (query as any)[0].count;
+    return (count as any)[0].count;
   }
 
   async getReportUser(payload: GetReportUser) {
+    const { limit, skip, project_id, ...query } = payload;
     return await this.taskSuccessModel.aggregate([
       [
         {
@@ -277,6 +372,20 @@ export class TaskSuccessService {
           },
         },
         {
+          $sort: {
+            'user.createdAt': 1,
+          },
+        },
+        {
+          $match: query,
+        },
+        {
+          $skip: payload.skip ? Number(payload.skip) : 0,
+        },
+        {
+          $limit: payload.limit ? Number(payload.limit) : 10,
+        },
+        {
           $project: {
             _id: 0,
             price: 1,
@@ -288,12 +397,6 @@ export class TaskSuccessService {
             bank_account_no: '$user.payment.bank_account_no',
             bank_account_name: '$user.payment.bank_account_name',
           },
-        },
-        {
-          $skip: payload.skip ? Number(payload.skip) : 0,
-        },
-        {
-          $limit: payload.limit ? Number(payload.limit) : 10,
         },
       ],
     ]);
@@ -361,15 +464,10 @@ export class TaskSuccessService {
             $toObjectId: '$user_id',
           },
           price: {
-            $sum: {
-              $cond: [
-                {
-                  $eq: ['$payment_status', 'doing'],
-                },
-                '$price',
-                0,
-              ],
-            },
+            $sum: '$price',
+          },
+          count: {
+            $sum: 1,
           },
         },
       },
@@ -389,7 +487,10 @@ export class TaskSuccessService {
       {
         $project: {
           _id: 0,
-          price: 1,
+          price: {
+            $round: ['$price', 2],
+          },
+          count: 1,
           firstname: '$user.firstname',
           lastname: '$user.lastname',
           email: '$user.email',

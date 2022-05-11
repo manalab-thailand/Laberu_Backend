@@ -18,7 +18,7 @@ import { FindProjectByCustomerDto } from './dto/find-project-by-customer.dto';
 import { UpdateProjectProcessDto } from './dto/update-project-process.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('project')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
