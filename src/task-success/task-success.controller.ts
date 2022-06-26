@@ -55,7 +55,7 @@ export class TaskSuccessController {
       task_id,
     );
 
-    const _project = await this.projectService.findOne(project_id);
+    const _project = await this.projectService.findProject(project_id);
 
     if (countTaskSuccess >= _project.label_count) {
       await this.taskImageService.updateProcessTaskImage(task_id);

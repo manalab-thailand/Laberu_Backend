@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Mongoose, Types } from 'mongoose';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { FindProjectByCustomerDto } from './dto/find-project-by-customer.dto';
+import { AddPermissionRequest, RemovePermissionRequest } from './dto/request';
 import { UpdateProjectProcessDto } from './dto/update-project-process.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project, ProjectDocument } from './entities/project.schema';
@@ -22,6 +23,7 @@ export class ProjectService {
       createdAt: new Date(),
       updatedAt: new Date(),
       update_by: '',
+      isViewOnlyUsers: [],
     });
     return await createdProject.save();
   }
@@ -50,6 +52,14 @@ export class ProjectService {
           },
         },
       ])
+      .exec();
+  }
+
+  async findProject(project_id: string): Promise<Project> {
+    return await this.projectModel
+      .findOne({
+        _id: project_id,
+      })
       .exec();
   }
 
@@ -142,6 +152,59 @@ export class ProjectService {
       .findByIdAndUpdate(
         project_id,
         { process, update_by, updatedAt: new Date() },
+        { upsert: false, useFindAndModify: false },
+      )
+      .exec();
+  }
+
+  async addPermission(payload: AddPermissionRequest) {
+    const { project_id, user } = payload;
+
+    const project = await this.projectModel.findOne({
+      _id: project_id,
+    });
+
+    if (!project) return;
+
+    const permission = project.permission;
+
+    permission.push({
+      ...user,
+      createdAt: new Date(),
+    });
+
+    return await this.projectModel
+      .findByIdAndUpdate(
+        project_id,
+        {
+          update_by: 'admin',
+          updatedAt: new Date(),
+          permission: permission,
+        },
+        { upsert: false, useFindAndModify: false },
+      )
+      .exec();
+  }
+
+  async removePermission(payload: RemovePermissionRequest) {
+    const { project_id, user_id } = payload;
+
+    const project = await this.projectModel.findOne({
+      _id: project_id,
+    });
+
+    if (!project) return;
+
+    const permission = project.permission.filter((x) => x.user !== user_id);
+
+    return await this.projectModel
+      .findByIdAndUpdate(
+        project_id,
+        {
+          update_by: 'admin',
+          updatedAt: new Date(),
+          permission: permission,
+        },
         { upsert: false, useFindAndModify: false },
       )
       .exec();

@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export interface IProjectConfigInput {
   annotation?: IAnnotationConfigInput[];
   labelling?: ILabellingConfigInput[];
@@ -19,4 +21,10 @@ export interface IClassificationConfigInput {
 export interface ICustomAttribute {
   display_name: string;
   value: string;
+}
+
+export interface IProjectPermission {
+  user: Types.ObjectId;
+  role: string;
+  createdAt: Date;
 }

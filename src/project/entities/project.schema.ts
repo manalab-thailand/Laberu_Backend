@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, ObjectId, Types } from 'mongoose';
 import {
   ProjectLabelType,
   ProjectImageType,
@@ -9,6 +9,7 @@ import {
 import {
   ICustomAttribute,
   IProjectConfigInput,
+  IProjectPermission,
 } from '../interface/project.interface';
 
 export type ProjectDocument = Project & Document;
@@ -68,6 +69,9 @@ export class Project {
 
   @Prop()
   update_by: string | null;
+
+  @Prop()
+  permission: IProjectPermission[];
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

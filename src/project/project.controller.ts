@@ -17,6 +17,7 @@ import { Project } from './entities/project.schema';
 import { FindProjectByCustomerDto } from './dto/find-project-by-customer.dto';
 import { UpdateProjectProcessDto } from './dto/update-project-process.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AddPermissionRequest, RemovePermissionRequest } from './dto/request';
 
 // @UseGuards(JwtAuthGuard)
 @Controller('project')
@@ -50,9 +51,22 @@ export class ProjectController {
   }
 
   @HttpCode(200)
+  @Post('add-permission')
+  async addPermission(@Body() payload: AddPermissionRequest): Promise<Project> {
+    return await this.projectService.addPermission(payload);
+  }
+
+  @HttpCode(200)
+  @Delete('remove-permission')
+  async removePermission(
+    @Body() payload: RemovePermissionRequest,
+  ): Promise<Project> {
+    return await this.projectService.removePermission(payload);
+  }
+
+  @HttpCode(200)
   @Put('update')
   async updateProject(@Body() payload: UpdateProjectDto): Promise<Project> {
-    console.log('🚀 ~ payload', payload);
     return await this.projectService.updateProject(payload);
   }
 

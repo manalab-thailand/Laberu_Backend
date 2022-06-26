@@ -83,4 +83,12 @@ export class TaskImageController {
   ): Promise<any> {
     return await this.taskImageService.updateStatusTaskImage(payload);
   }
+
+  @HttpCode(200)
+  @Get('recheck')
+  async recheck(
+    @Query() payload: { limit: number; skip: number },
+  ): Promise<any> {
+    return await this.taskImageService.recheck(payload);
+  }
 }
