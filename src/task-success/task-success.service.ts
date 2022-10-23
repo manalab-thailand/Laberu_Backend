@@ -16,6 +16,7 @@ import {
   TaskSuccessDocument,
 } from './entities/task-success.schema';
 import { PaymentStatus } from './interface/task-success.enum';
+import * as moment from 'moment';
 
 @Injectable()
 export class TaskSuccessService {
@@ -44,103 +45,128 @@ export class TaskSuccessService {
     return await createdTaskSuccess.save();
   }
 
+  formatQuery(payload: FindByProjectId) {
+    const query = [] as any;
+    let sort = {} as any;
+    const match = {} as any;
+    if (payload.project_id) {
+      match.project_id = payload.project_id;
+    }
+
+    if (payload.shortcode) {
+      match.shortcode = { $regex: payload.shortcode, $options: 'i' };
+    }
+
+    if (payload.start_at && payload.end_at) {
+      match.createdAt = {
+        $gte: moment(payload.start_at).startOf('days').toDate(),
+        $lt: moment(payload.end_at).endOf('days').toDate(),
+      };
+    }
+
+    query.push({ $match: match });
+
+    if (payload.sort) {
+      const splitSort = payload.sort.split(':');
+      sort = {
+        [splitSort[0]]: splitSort[1].toLocaleLowerCase() === 'desc' ? -1 : 1,
+      };
+    } else {
+      sort = {
+        createdAt: -1,
+      };
+    }
+
+    query.push({
+      $sort: sort,
+    });
+
+    if (payload.skip) {
+      query.push({
+        $skip: payload.skip ? Number(payload.skip) : 0,
+      });
+    }
+
+    if (payload.limit) {
+      query.push({
+        $limit: payload.limit ? Number(payload.limit) : 10,
+      });
+    }
+
+    return query;
+  }
+
   async findCountTaskSuccessByProject(
     payload: FindByProjectId,
   ): Promise<Number> {
-    const { project_id, ...query } = payload;
-    const count = await this.taskSuccessModel
-      .aggregate([
-        {
-          $match: {
-            project_id: project_id,
-          },
-        },
-        {
-          $addFields: {
-            userId: {
-              $toObjectId: '$user_id',
-            },
-          },
-        },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        {
-          $unwind: {
-            path: '$user',
-          },
-        },
-        {
-          $match: query,
-        },
-        {
-          $group: {
-            _id: null,
-            count: {
-              $sum: 1,
-            },
-          },
-        },
-      ])
-      .allowDiskUse(true)
-      .exec();
+    const query = this.formatQuery(payload);
 
-    return count[0].count;
+    query.push({
+      $addFields: {
+        userId: {
+          $toObjectId: '$user_id',
+        },
+      },
+    });
+
+    query.push({
+      $lookup: {
+        from: 'user',
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'user',
+      },
+    });
+
+    query.push({
+      $unwind: {
+        path: '$user',
+      },
+    });
+
+    query.push({
+      $group: {
+        _id: null,
+        count: {
+          $sum: 1,
+        },
+      },
+    });
+
+    const count = await this.taskSuccessModel.aggregate(query).exec();
+
+    return count[0]?.count;
   }
 
   async findTaskSuccessByProject(
     payload: FindByProjectId,
   ): Promise<TaskSuccess[]> {
-    const { project_id, limit, skip, ...query } = payload;
-    return await this.taskSuccessModel
-      .aggregate([
-        {
-          $match: {
-            project_id: project_id,
-          },
+    const query = this.formatQuery(payload);
+
+    query.push({
+      $addFields: {
+        userId: {
+          $toObjectId: '$user_id',
         },
-        {
-          $addFields: {
-            userId: {
-              $toObjectId: '$user_id',
-            },
-          },
-        },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        {
-          $unwind: {
-            path: '$user',
-          },
-        },
-        {
-          $match: query,
-        },
-        {
-          $sort: {
-            createdAt: -1,
-          },
-        },
-        {
-          $skip: skip ? Number(skip) : 0,
-        },
-        {
-          $limit: limit ? Number(limit) : 10,
-        },
-      ])
-      .allowDiskUse(true)
-      .exec();
+      },
+    });
+
+    query.push({
+      $lookup: {
+        from: 'user',
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'user',
+      },
+    });
+
+    query.push({
+      $unwind: {
+        path: '$user',
+      },
+    });
+
+    return await this.taskSuccessModel.aggregate(query).exec();
   }
 
   async findTaskSuccessByUser(payload: FindByUserId): Promise<TaskSuccess[]> {
@@ -256,6 +282,7 @@ export class TaskSuccessService {
         {
           project_id,
           payment_status: PaymentStatus.WAITING,
+          accept: true,
         },
         {
           payment_status: PaymentStatus.DOING,
@@ -271,7 +298,7 @@ export class TaskSuccessService {
     const { project_id, update_by } = payload;
     return await this.taskSuccessModel
       .updateMany(
-        { project_id, payment_status: PaymentStatus.DOING },
+        { project_id, payment_status: PaymentStatus.DOING, accept: true },
         {
           payment_status: PaymentStatus.SUCCUSS,
           paymentAt: new Date(),
@@ -290,6 +317,7 @@ export class TaskSuccessService {
       {
         $match: {
           project_id: project_id,
+          accept: true,
         },
       },
       {
@@ -335,6 +363,7 @@ export class TaskSuccessService {
         {
           $match: {
             project_id: payload.project_id,
+            accept: true,
           },
         },
         {
@@ -408,6 +437,7 @@ export class TaskSuccessService {
         {
           $match: {
             project_id: payload.project_id,
+            accept: true,
           },
         },
         {
@@ -455,6 +485,7 @@ export class TaskSuccessService {
       {
         $match: {
           project_id,
+          accept: true,
           payment_status: PaymentStatus.DOING,
         },
       },
