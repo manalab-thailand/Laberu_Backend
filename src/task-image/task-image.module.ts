@@ -15,6 +15,7 @@ import {
 import { TaskSuccessService } from 'src/task-success/task-success.service';
 import { Project, ProjectSchema } from 'src/project/entities/project.schema';
 import { ProjectService } from 'src/project/project.service';
+import { TaskImageRejectService } from 'src/task-image-reject/task-image-reject.service';
 
 @Module({
   imports: [

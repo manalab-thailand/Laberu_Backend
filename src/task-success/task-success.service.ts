@@ -47,7 +47,6 @@ export class TaskSuccessService {
 
   formatQuery(payload: FindByProjectId) {
     const query = [] as any;
-    let sort = {} as any;
     const match = {} as any;
     if (payload.project_id) {
       match.project_id = payload.project_id;
@@ -57,6 +56,8 @@ export class TaskSuccessService {
       match.shortcode = { $regex: payload.shortcode, $options: 'i' };
     }
 
+    match.accept = true;
+
     if (payload.start_at && payload.end_at) {
       match.createdAt = {
         $gte: moment(payload.start_at).startOf('days').toDate(),
@@ -65,33 +66,6 @@ export class TaskSuccessService {
     }
 
     query.push({ $match: match });
-
-    if (payload.sort) {
-      const splitSort = payload.sort.split(':');
-      sort = {
-        [splitSort[0]]: splitSort[1].toLocaleLowerCase() === 'desc' ? -1 : 1,
-      };
-    } else {
-      sort = {
-        createdAt: -1,
-      };
-    }
-
-    query.push({
-      $sort: sort,
-    });
-
-    if (payload.skip) {
-      query.push({
-        $skip: payload.skip ? Number(payload.skip) : 0,
-      });
-    }
-
-    if (payload.limit) {
-      query.push({
-        $limit: payload.limit ? Number(payload.limit) : 10,
-      });
-    }
 
     return query;
   }
@@ -142,6 +116,35 @@ export class TaskSuccessService {
     payload: FindByProjectId,
   ): Promise<TaskSuccess[]> {
     const query = this.formatQuery(payload);
+
+    let sort = {} as any;
+
+    if (payload.sort) {
+      const splitSort = payload.sort.split(':');
+      sort = {
+        [splitSort[0]]: splitSort[1].toLocaleLowerCase() === 'desc' ? -1 : 1,
+      };
+    } else {
+      sort = {
+        createdAt: -1,
+      };
+    }
+
+    query.push({
+      $sort: sort,
+    });
+
+    if (payload.skip) {
+      query.push({
+        $skip: payload.skip ? Number(payload.skip) : 0,
+      });
+    }
+
+    if (payload.limit) {
+      query.push({
+        $limit: payload.limit ? Number(payload.limit) : 10,
+      });
+    }
 
     query.push({
       $addFields: {
@@ -255,13 +258,16 @@ export class TaskSuccessService {
 
   async updateAcceptStatus(payload: UpdateAcceptStatus): Promise<TaskSuccess> {
     const { accept, task_success_id, update_by } = payload;
-    return await this.taskSuccessModel
+
+    const updatedTaskSuccess = await this.taskSuccessModel
       .findByIdAndUpdate(
         task_success_id,
         { accept, update_by, updatedAt: new Date() },
         { upsert: false, useFindAndModify: false },
       )
       .exec();
+
+    return updatedTaskSuccess;
   }
 
   async updateAcceptStatusProject(payload: UpdateAcceptStatusProject) {

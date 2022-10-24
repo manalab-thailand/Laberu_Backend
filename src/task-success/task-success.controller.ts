@@ -14,6 +14,7 @@ import { FilterQuery } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { ProjectService } from 'src/project/project.service';
+import { TaskImageRejectService } from 'src/task-image-reject/task-image-reject.service';
 import { TaskImageStatus } from 'src/task-image/interface/task-image.enum';
 import { TaskImageService } from 'src/task-image/task-image.service';
 import { CreateTaskSuccessDto } from './dto/create-task-success.dto';
@@ -38,6 +39,7 @@ export class TaskSuccessController {
     private readonly taskSuccessService: TaskSuccessService,
     private readonly projectService: ProjectService,
     private readonly taskImageService: TaskImageService,
+    private readonly taskImageRejectSrv: TaskImageRejectService,
   ) {}
 
   @HttpCode(200)
@@ -98,7 +100,14 @@ export class TaskSuccessController {
   async updateAcceptStatus(
     @Body() payload: UpdateAcceptStatus,
   ): Promise<TaskSuccess> {
-    return await this.taskSuccessService.updateAcceptStatus(payload);
+    const response = await this.taskSuccessService.updateAcceptStatus(payload);
+
+    await this.taskImageRejectSrv.create({
+      task_success_id: payload.task_success_id,
+      user_id: payload.update_by,
+    });
+
+    return response;
   }
 
   @HttpCode(200)
