@@ -149,8 +149,8 @@ export class TaskImageRejectService {
       shortcode: taskSuccess.shortcode,
       status: 'waiting',
       new_result: null,
-      user_id: Types.ObjectId(payload.user_id),
-      task_success_id: Types.ObjectId(payload.task_success_id),
+      user_id: Types.ObjectId(taskSuccess.user_id),
+      task_success_id: Types.ObjectId(taskSuccess._id),
       project_id: Types.ObjectId(taskSuccess.project_id),
       approve_by: null,
       reject_by: user,
@@ -159,26 +159,6 @@ export class TaskImageRejectService {
       updatedAt: new Date(),
     });
     return await createdTaskImageReject.save();
-
-    // const taskSuccess = await this.taskSuccessModel.find({
-    //   accept: false,
-    // });
-
-    // const data = taskSuccess.map((x) => ({
-    //   shortcode: x.shortcode,
-    //   status: 'waiting',
-    //   new_result: null,
-    //   user_id: Types.ObjectId(x.user_id),
-    //   task_success_id: Types.ObjectId(x._id),
-    //   project_id: Types.ObjectId(x.project_id),
-    //   approve_by: null,
-    //   reject_by: null,
-    //   approvedAt: null,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // }));
-
-    // return await this.taskImageReject.insertMany(data);
   }
 
   async update(payload: IUpdateRequest) {
