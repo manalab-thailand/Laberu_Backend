@@ -17,6 +17,7 @@ import {
 } from './entities/task-success.schema';
 import { PaymentStatus } from './interface/task-success.enum';
 import * as moment from 'moment';
+import { IUpdateResult } from './interface/task-success.interface';
 
 @Injectable()
 export class TaskSuccessService {
@@ -254,6 +255,14 @@ export class TaskSuccessService {
     return await this.taskSuccessModel.countDocuments({
       task_id,
     });
+  }
+
+  async updateResult(payload: IUpdateResult) {
+    return await this.taskSuccessModel.findByIdAndUpdate(
+      payload.id,
+      { result: payload.result },
+      { upsert: false, useFindAndModify: true },
+    );
   }
 
   async updateAcceptStatus(payload: UpdateAcceptStatus): Promise<TaskSuccess> {

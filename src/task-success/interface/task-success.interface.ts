@@ -31,3 +31,8 @@ export interface IDetection {
 export interface IResultClassification {
   class: Object;
 }
+
+export interface IUpdateResult {
+  id: number;
+  result: IResult;
+}

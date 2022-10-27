@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Put,
+  Patch,
   Param,
   Delete,
   HttpCode,
@@ -30,6 +31,7 @@ import {
   TaskSuccess,
   TaskSuccessDocument,
 } from './entities/task-success.schema';
+import { IUpdateResult } from './interface/task-success.interface';
 import { TaskSuccessService } from './task-success.service';
 
 // @UseGuards(JwtAuthGuard)
@@ -93,6 +95,12 @@ export class TaskSuccessController {
   @Get('history')
   async findHistory(@Query() payload: FilterQuery<TaskSuccessDocument>) {
     return await this.taskSuccessService.findHistory(payload);
+  }
+
+  @HttpCode(200)
+  @Patch('update-result')
+  async updateResult(@Body() payload: IUpdateResult) {
+    return await this.taskSuccessService.updateResult(payload);
   }
 
   @HttpCode(200)
