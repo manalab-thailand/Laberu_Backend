@@ -13,7 +13,6 @@ import {
   TaskSuccess,
   TaskSuccessDocument,
 } from 'src/task-success/entities/task-success.schema';
-import * as resultJSON from '../../captions.json';
 import { PaymentStatus } from 'src/task-success/interface/task-success.enum';
 
 @Injectable()
@@ -54,7 +53,7 @@ export class TaskImageService {
 
   async getTaskImage(payload: GetTaskImageDto): Promise<TaskImage> {
     const { project_id, user_id } = payload;
-    return await this.taskImageModel
+    const taskImage = await this.taskImageModel
       .aggregate([
         {
           $match: {
@@ -63,11 +62,26 @@ export class TaskImageService {
             project_id: project_id,
           },
         },
+        { $limit: 20 },
         {
           $lookup: {
             from: 'task_success',
-            localField: 'shortcode',
-            foreignField: 'shortcode',
+            let: {
+              shortcode: '$shortcode',
+              project_id: '$project_id',
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$shortcode', '$$shortcode'] },
+                      { $eq: ['$project_id', '$$project_id'] },
+                    ],
+                  },
+                },
+              },
+            ],
             as: 'task_success',
           },
         },
@@ -77,6 +91,12 @@ export class TaskImageService {
         { $limit: 1 },
       ])
       .exec();
+
+    if (!taskImage.length) {
+      this.getTaskImage({ project_id, user_id });
+    }
+
+    return taskImage;
   }
 
   async getTaskImageByShortcode(

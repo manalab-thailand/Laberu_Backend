@@ -74,6 +74,12 @@ export class TaskSuccessController {
   }
 
   @HttpCode(200)
+  @Get('')
+  async findTaskSuccess(@Query() payload: FindByProjectId) {
+    return await this.taskSuccessService.findTaskSuccessByProject(payload);
+  }
+
+  @HttpCode(200)
   @Get('find-by-project')
   async findTaskSuccessByProject(@Query() payload: FindByProjectId) {
     return await this.taskSuccessService.findTaskSuccessByProject(payload);

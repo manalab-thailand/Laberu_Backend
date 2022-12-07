@@ -27,7 +27,6 @@ export class UserController {
   @HttpCode(200)
   @Post('create-user')
   async createUser(@Body() payload: CreateUserDto): Promise<User> {
-    console.log('🚀 ~ payload', payload);
     return await this.userService.createUser(payload);
   }
 
@@ -43,6 +42,13 @@ export class UserController {
   @Get('find-one')
   async findOneUser(@Query() payload: FindOneUserDto): Promise<User> {
     return await this.userService.findOneUser(payload);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
+  @Get('')
+  async findByQuery(@Query() payload: { email: string }): Promise<User> {
+    return await this.userService.findByQuery(payload);
   }
 
   @UseGuards(JwtAuthGuard)

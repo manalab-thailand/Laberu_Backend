@@ -57,6 +57,10 @@ export class TaskSuccessService {
       match.shortcode = { $regex: payload.shortcode, $options: 'i' };
     }
 
+    if (payload.user_id) {
+      match.user_id = payload.user_id;
+    }
+
     match.accept = true;
 
     if (payload.start_at && payload.end_at) {
@@ -113,10 +117,22 @@ export class TaskSuccessService {
     return count[0]?.count;
   }
 
-  async findTaskSuccessByProject(
-    payload: FindByProjectId,
-  ): Promise<TaskSuccess[]> {
+  async findTaskSuccessByProject(payload: FindByProjectId) {
+    console.log(payload);
+
     const query = this.formatQuery(payload);
+
+    const total =
+      (
+        await this.taskSuccessModel
+          .aggregate([
+            ...query,
+            {
+              $count: 'total',
+            },
+          ])
+          .exec()
+      )[0]?.total ?? 0;
 
     let sort = {} as any;
 
@@ -135,9 +151,9 @@ export class TaskSuccessService {
       $sort: sort,
     });
 
-    if (payload.skip) {
+    if (payload.page) {
       query.push({
-        $skip: payload.skip ? Number(payload.skip) : 0,
+        $skip: payload.page ? (payload.page - 1) * payload.limit : 0,
       });
     }
 
@@ -170,7 +186,17 @@ export class TaskSuccessService {
       },
     });
 
-    return await this.taskSuccessModel.aggregate(query).exec();
+    const data = await this.taskSuccessModel.aggregate(query).exec();
+
+    return {
+      pagination: {
+        page: payload.page ? Number(payload.page) : 1,
+        page_size: Number(payload.limit ?? 10),
+        page_count: Math.ceil(total / Number(payload.limit ?? 10)),
+        total: total,
+      },
+      entities: data,
+    };
   }
 
   async findTaskSuccessByUser(payload: FindByUserId): Promise<TaskSuccess[]> {

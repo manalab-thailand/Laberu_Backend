@@ -45,6 +45,11 @@ export class UserService {
     return await this.userModel.findById(user_id).exec();
   }
 
+  async findByQuery(payload: { email: string }): Promise<User> {
+    const { email } = payload;
+    return await this.userModel.findOne({ email: email }).exec();
+  }
+
   async findAllUser(): Promise<User[]> {
     return await this.userModel.find().exec();
   }

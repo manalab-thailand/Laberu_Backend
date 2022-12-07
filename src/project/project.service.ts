@@ -98,6 +98,7 @@ export class ProjectService {
   async findProjectByUser(): Promise<Project[]> {
     return await this.projectModel
       .find({ process: ProjectProcess.DOING })
+      .sort({ _id: 1 })
       .exec();
   }
 

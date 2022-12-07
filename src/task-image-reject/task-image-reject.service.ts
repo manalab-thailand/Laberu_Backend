@@ -141,97 +141,24 @@ export class TaskImageRejectService {
   }
 
   async create(payload: ICreateRequest) {
-    // const taskSuccess = await this.taskSuccessModel.findById(
-    //   payload.task_success_id,
-    // );
-    // const user = await this.userModel.findById(payload.user_id);
-    // const createdTaskImageReject = new this.taskImageReject({
-    //   shortcode: taskSuccess.shortcode,
-    //   status: 'waiting',
-    //   new_result: null,
-    //   user_id: Types.ObjectId(taskSuccess.user_id),
-    //   task_success_id: Types.ObjectId(taskSuccess._id),
-    //   project_id: Types.ObjectId(taskSuccess.project_id),
-    //   approve_by: null,
-    //   reject_by: user,
-    //   approvedAt: null,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // });
-    // return await createdTaskImageReject.save();
-
-    // const taskSuccess = await this.taskSuccessModel.find({
-    //   accept: false,
-    // });
-
-    // const data = taskSuccess.map((x) => ({
-    //   shortcode: x.shortcode,
-    //   status: 'waiting',
-    //   new_result: null,
-    //   user_id: Types.ObjectId(x.user_id),
-    //   task_success_id: Types.ObjectId(x._id),
-    //   project_id: Types.ObjectId(x.project_id),
-    //   approve_by: null,
-    //   reject_by: null,
-    //   approvedAt: null,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // }));
-
-    // return await this.taskImageReject.insertMany(data);
-
-    const query = [];
-
-    query.push({
-      $lookup: {
-        from: 'task_success',
-        localField: 'task_success_id',
-        foreignField: '_id',
-        as: 'task_success',
-      },
+    const taskSuccess = await this.taskSuccessModel.findById(
+      payload.task_success_id,
+    );
+    const user = await this.userModel.findById(payload.user_id);
+    const createdTaskImageReject = new this.taskImageReject({
+      shortcode: taskSuccess.shortcode,
+      status: 'waiting',
+      new_result: null,
+      user_id: Types.ObjectId(taskSuccess.user_id),
+      task_success_id: Types.ObjectId(taskSuccess._id),
+      project_id: Types.ObjectId(taskSuccess.project_id),
+      approve_by: null,
+      reject_by: user,
+      approvedAt: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
-
-    query.push({
-      $lookup: {
-        from: 'project',
-        localField: 'project_id',
-        foreignField: '_id',
-        as: 'project',
-      },
-    });
-
-    query.push({
-      $unwind: {
-        path: '$task_success',
-      },
-    });
-
-    query.push({
-      $unwind: {
-        path: '$project',
-      },
-    });
-
-    // query.push({
-    //   $limit: 10,
-    // });
-
-    const taskRejects = await this.taskImageReject.aggregate(query).exec();
-
-    for await (const [index, data] of taskRejects.entries()) {
-      const user_id = data.user_id;
-
-      if (user_id !== Types.ObjectId(user_id)) {
-        await this.taskImageReject.findByIdAndUpdate(
-          data._id,
-          { user_id: Types.ObjectId(user_id) },
-          { upsert: false, useFindAndModify: true },
-        );
-        console.log(index, user_id, 'to', Types.ObjectId(user_id));
-      }
-    }
-
-    return taskRejects;
+    return await createdTaskImageReject.save();
   }
 
   async update(payload: IUpdateRequest) {
