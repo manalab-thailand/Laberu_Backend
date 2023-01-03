@@ -18,32 +18,114 @@ import {
 import { PaymentStatus } from './interface/task-success.enum';
 import * as moment from 'moment';
 import { IUpdateResult } from './interface/task-success.interface';
+import {
+  TaskImage,
+  TaskImageDocument,
+} from 'src/task-image/entities/task-image.schema';
+import {
+  TaskImageProcess,
+  TaskImageStatus,
+} from 'src/task-image/interface/task-image.enum';
 
 @Injectable()
 export class TaskSuccessService {
   constructor(
     @InjectModel(TaskSuccess.name)
     private readonly taskSuccessModel: Model<TaskSuccessDocument>,
+    @InjectModel(TaskImage.name)
+    private readonly taskImageModel: Model<TaskImageDocument>,
     @InjectModel(Project.name)
     private readonly projectModel: Model<ProjectDocument>,
   ) {}
 
   async createTaskSuccess(payload: CreateTaskSuccessDto): Promise<TaskSuccess> {
-    const _project = await this.projectModel.findOne({
-      _id: payload.project_id,
-    });
+    try {
+      // const taskImages = await this.taskImageModel
+      //   .find({
+      //     status: TaskImageStatus.WAITING,
+      //     process: TaskImageProcess.DOING,
+      //     project_id: '6231ec988da4a55c9c8f82d0',
+      //   })
+      //   .limit(300)
+      //   .skip(0);
 
-    const createdTaskSuccess = new this.taskSuccessModel({
-      ...payload,
-      accept: true,
-      price: _project.price_image,
-      payment_status: PaymentStatus.WAITING,
-      paymentAt: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      update_by: '',
-    });
-    return await createdTaskSuccess.save();
+      // const taskImageIds = [];
+      // for await (const [index, iterator] of taskImages.entries()) {
+      //   const taskSuccess = await this.taskSuccessModel.find({
+      //     task_id: iterator._id,
+      //     accept: true,
+      //   });
+
+      //   console.log(index, 'from', taskImages.length);
+
+      //   if (taskSuccess.length) {
+      //     console.log(
+      //       'find task ค้างงงงง',
+      //       iterator._id,
+      //       taskImageIds.length + 1,
+      //     );
+      //     taskImageIds.push(iterator._id);
+      //   }
+      // }
+
+      // await this.taskImageModel.updateMany(
+      //   {
+      //     _id: { $in: taskImageIds },
+      //   },
+      //   {
+      //     status: TaskImageStatus.SUCCESS,
+      //     process: TaskImageProcess.SUCCESS,
+      //   },
+      //   { upsert: false },
+      // );
+
+      // console.log('success');
+
+      // console.log(payload);
+
+      const _project = await this.projectModel.findOne({
+        _id: payload.project_id,
+      });
+
+      if (!_project) return;
+
+      const taskSuccess = await this.taskSuccessModel.findOne({
+        project_id: _project.id,
+        shortcode: payload.shortcode,
+        user_id: payload.user_id,
+        accept: true,
+      });
+
+      if (taskSuccess) return;
+
+      const createdTaskSuccess = new this.taskSuccessModel({
+        ...payload,
+        accept: true,
+        price: _project.price_image,
+        payment_status: PaymentStatus.WAITING,
+        paymentAt: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        update_by: '',
+      });
+
+      await createdTaskSuccess.save();
+
+      await this.taskImageModel.findOneAndUpdate(
+        {
+          _id: payload.task_id,
+        },
+        {
+          status: TaskImageStatus.SUCCESS,
+          process: TaskImageProcess.SUCCESS,
+        },
+        { upsert: false },
+      );
+
+      return;
+    } catch (error) {
+      return error;
+    }
   }
 
   formatQuery(payload: FindByProjectId) {

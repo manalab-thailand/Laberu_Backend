@@ -39,7 +39,7 @@ export class TaskImageController {
   @HttpCode(200)
   @Post('get-task-image')
   async getTaskImage(@Body() payload: GetTaskImageDto): Promise<any> {
-    const getTaskImage = (await this.taskImageService.getTaskImage(payload))[0];
+    const getTaskImage = await this.taskImageService.getTaskImage(payload);
 
     if (!getTaskImage) {
       return {
@@ -48,12 +48,7 @@ export class TaskImageController {
       };
     }
 
-    const { _id, shortcode } = getTaskImage;
-
-    const imagedata = await this.imageDataService.findOneByShortcode(
-      shortcode,
-      payload.project_id,
-    );
+    const { _id, shortcode } = getTaskImage[0];
 
     await this.taskImageService.updateStatusTaskImage({
       task_id: _id,
@@ -64,8 +59,8 @@ export class TaskImageController {
       status: 200,
       message: 'success',
       data: {
-        task_image: getTaskImage,
-        image_data: imagedata,
+        task_image: getTaskImage[0],
+        image_data: null,
       },
     };
   }

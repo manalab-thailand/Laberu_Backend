@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { Model } from 'mongoose';
 import { CreateTaskImageManyDto } from './dto/create-task-image-many.dto';
 import { GetTaskImageByShortcode } from './dto/get-task-image-by-shortcode.dto';
@@ -8,20 +7,16 @@ import { GetTaskImageDto } from './dto/get-task-image.dto';
 import { UpdateStatusTaskImageDto } from './dto/update-status-task-image.dto';
 import { TaskImage, TaskImageDocument } from './entities/task-image.schema';
 import { TaskImageProcess, TaskImageStatus } from './interface/task-image.enum';
-import * as moment from 'moment';
-import {
-  TaskSuccess,
-  TaskSuccessDocument,
-} from 'src/task-success/entities/task-success.schema';
-import { PaymentStatus } from 'src/task-success/interface/task-success.enum';
+import { Project, ProjectDocument } from 'src/project/entities/project.schema';
+import { ProjectProcess } from 'src/project/interface/project.enum';
 
 @Injectable()
 export class TaskImageService {
   constructor(
     @InjectModel(TaskImage.name)
     private readonly taskImageModel: Model<TaskImageDocument>,
-    @InjectModel(TaskSuccess.name)
-    private readonly taskSuccessModel: Model<TaskSuccessDocument>,
+    @InjectModel(Project.name)
+    private readonly projectModel: Model<ProjectDocument>,
   ) {}
 
   async createTaskImageMany(
@@ -37,14 +32,12 @@ export class TaskImageService {
         project_id: payload.project_id,
       })
       .exec();
-
     const success = await this.taskImageModel
       .countDocuments({
         project_id: payload.project_id,
         process: TaskImageProcess.SUCCESS,
       })
       .exec();
-
     return {
       total,
       success,
@@ -53,6 +46,15 @@ export class TaskImageService {
 
   async getTaskImage(payload: GetTaskImageDto): Promise<TaskImage> {
     const { project_id, user_id } = payload;
+
+    const project = await this.projectModel
+      .findOne({ _id: payload.project_id })
+      .exec();
+
+    if (project && project.process === ProjectProcess.SUCCESS) {
+      return null;
+    }
+
     const taskImage = await this.taskImageModel
       .aggregate([
         {
@@ -62,7 +64,7 @@ export class TaskImageService {
             project_id: project_id,
           },
         },
-        { $limit: 20 },
+        { $limit: 200 },
         {
           $lookup: {
             from: 'task_success',
@@ -86,17 +88,22 @@ export class TaskImageService {
           },
         },
         {
-          $match: { 'task_success.user_id': { $ne: user_id } },
+          $match: {
+            'task_success.user_id': { $ne: user_id },
+            'task_success.accept': { $ne: true },
+          },
         },
         { $limit: 1 },
       ])
       .exec();
 
-    if (!taskImage.length) {
-      this.getTaskImage({ project_id, user_id });
-    }
+    console.log(taskImage);
 
-    return taskImage;
+    if (!taskImage.length) {
+      await this.getTaskImage({ project_id, user_id });
+    } else {
+      return taskImage;
+    }
   }
 
   async getTaskImageByShortcode(

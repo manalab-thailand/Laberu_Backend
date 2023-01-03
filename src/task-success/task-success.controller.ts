@@ -49,28 +49,7 @@ export class TaskSuccessController {
   async createTaskSuccess(
     @Body() payload: CreateTaskSuccessDto,
   ): Promise<TaskSuccess> {
-    const createdTaskSuccess = await this.taskSuccessService.createTaskSuccess(
-      payload,
-    );
-
-    const { project_id, task_id } = createdTaskSuccess;
-
-    const countTaskSuccess = await this.taskSuccessService.findCountTaskSuccessByTaskId(
-      task_id,
-    );
-
-    const _project = await this.projectService.findProject(project_id);
-
-    if (countTaskSuccess >= _project.label_count) {
-      await this.taskImageService.updateProcessTaskImage(task_id);
-    } else {
-      await this.taskImageService.updateStatusTaskImage({
-        task_id,
-        status: TaskImageStatus.WAITING,
-      });
-    }
-
-    return createdTaskSuccess;
+    return await this.taskSuccessService.createTaskSuccess(payload);
   }
 
   @HttpCode(200)
