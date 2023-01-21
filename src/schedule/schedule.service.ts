@@ -31,7 +31,7 @@ export class ScheduleTaskImageService {
     private readonly taskSuccessModel: Model<TaskSuccessDocument>,
   ) {}
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_30_MINUTES)
   async handleCron() {
     const taskImages = await this.taskImageModel.find({
       status: TaskImageStatus.DOING,
@@ -41,9 +41,11 @@ export class ScheduleTaskImageService {
       },
     });
     if (!taskImages.length) return;
+
     const listIds = taskImages
       .filter((x) => moment().diff(x.doingAt, 'hours') > 1)
-      .map((x) => x._id);
+      .map((x) => new Types.ObjectId(x._id));
+
     await this.taskImageModel.updateMany(
       {
         _id: {
@@ -54,6 +56,41 @@ export class ScheduleTaskImageService {
         $set: {
           status: TaskImageStatus.WAITING,
           doingAt: null,
+        },
+      },
+      { upsert: false },
+    );
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  async handleCronTaskImage() {
+    const taskImages = await this.taskImageModel.find({
+      status: TaskImageStatus.WAITING,
+    });
+
+    const taskImagesIDs = taskImages.map((x) => x._id);
+
+    if (!taskImagesIDs.length) return;
+
+    const taskSuccesses = await this.taskSuccessModel.find({
+      task_id: { $in: taskImagesIDs },
+      accept: true,
+    });
+
+    if (!taskSuccesses.length) return;
+
+    const taskImagesSuccessIDs = taskSuccesses.map(
+      (x) => new Types.ObjectId(x.task_id),
+    );
+
+    await this.taskImageModel.updateMany(
+      {
+        _id: { $in: taskImagesSuccessIDs },
+      },
+      {
+        $set: {
+          status: TaskImageStatus.SUCCESS,
+          process: TaskImageProcess.SUCCESS,
         },
       },
       { upsert: false },

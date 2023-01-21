@@ -10,6 +10,10 @@ import {
 } from 'src/image-data/entities/image-data.schema';
 import { Project, ProjectSchema } from 'src/project/entities/project.schema';
 import { ProjectService } from 'src/project/project.service';
+import {
+  TaskSuccess,
+  TaskSuccessSchema,
+} from 'src/task-success/entities/task-success.schema';
 
 @Module({
   imports: [
@@ -17,6 +21,7 @@ import { ProjectService } from 'src/project/project.service';
       { name: TaskImage.name, schema: TaskImageSchema },
       { name: ImageData.name, schema: ImageDataSchema },
       { name: Project.name, schema: ProjectSchema },
+      { name: TaskSuccess.name, schema: TaskSuccessSchema },
     ]),
   ],
   controllers: [TaskImageController],

@@ -48,7 +48,7 @@ export class TaskImageController {
       };
     }
 
-    const { _id, shortcode } = getTaskImage[0];
+    const { _id } = getTaskImage[0];
 
     await this.taskImageService.updateStatusTaskImage({
       task_id: _id,

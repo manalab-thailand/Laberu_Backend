@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateTaskImageManyDto } from './dto/create-task-image-many.dto';
 import { GetTaskImageByShortcode } from './dto/get-task-image-by-shortcode.dto';
 import { GetTaskImageDto } from './dto/get-task-image.dto';
@@ -9,12 +9,18 @@ import { TaskImage, TaskImageDocument } from './entities/task-image.schema';
 import { TaskImageProcess, TaskImageStatus } from './interface/task-image.enum';
 import { Project, ProjectDocument } from 'src/project/entities/project.schema';
 import { ProjectProcess } from 'src/project/interface/project.enum';
+import {
+  TaskSuccess,
+  TaskSuccessDocument,
+} from 'src/task-success/entities/task-success.schema';
 
 @Injectable()
 export class TaskImageService {
   constructor(
     @InjectModel(TaskImage.name)
     private readonly taskImageModel: Model<TaskImageDocument>,
+    @InjectModel(TaskSuccess.name)
+    private readonly taskSuccessModel: Model<TaskSuccessDocument>,
     @InjectModel(Project.name)
     private readonly projectModel: Model<ProjectDocument>,
   ) {}
@@ -44,7 +50,7 @@ export class TaskImageService {
     };
   }
 
-  async getTaskImage(payload: GetTaskImageDto): Promise<TaskImage> {
+  async getTaskImage(payload: GetTaskImageDto): Promise<any> {
     const { project_id, user_id } = payload;
 
     const project = await this.projectModel
@@ -55,54 +61,52 @@ export class TaskImageService {
       return null;
     }
 
-    const taskImage = await this.taskImageModel
-      .aggregate([
-        {
-          $match: {
-            status: 'waiting',
-            process: 'doing',
-            project_id: project_id,
-          },
-        },
-        { $limit: 200 },
-        {
-          $lookup: {
-            from: 'task_success',
-            let: {
-              shortcode: '$shortcode',
-              project_id: '$project_id',
+    try {
+      const taskImage = await this.taskImageModel
+        .aggregate([
+          {
+            $match: {
+              status: 'waiting',
+              process: 'doing',
+              project_id: project_id,
             },
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $and: [
-                      { $eq: ['$shortcode', '$$shortcode'] },
-                      { $eq: ['$project_id', '$$project_id'] },
-                    ],
+          },
+          { $limit: 50 },
+          {
+            $lookup: {
+              from: 'task_success',
+              let: {
+                shortcode: '$shortcode',
+                project_id: '$project_id',
+              },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        { $eq: ['$shortcode', '$$shortcode'] },
+                        { $eq: ['$project_id', '$$project_id'] },
+                      ],
+                    },
                   },
                 },
-              },
-            ],
-            as: 'task_success',
+              ],
+              as: 'task_success',
+            },
           },
-        },
-        {
-          $match: {
-            'task_success.user_id': { $ne: user_id },
-            'task_success.accept': { $ne: true },
+          {
+            $match: {
+              'task_success.user_id': { $ne: user_id },
+              'task_success.accept': { $ne: true },
+            },
           },
-        },
-        { $limit: 1 },
-      ])
-      .exec();
+          { $limit: 1 },
+        ])
+        .exec();
 
-    console.log(taskImage);
-
-    if (!taskImage.length) {
-      await this.getTaskImage({ project_id, user_id });
-    } else {
       return taskImage;
+    } catch (error) {
+      console.log(error);
     }
   }
 
